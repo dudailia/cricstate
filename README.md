@@ -1,5 +1,14 @@
 # cricstate — Module 1: State Core
 
+## Data attribution & license
+
+Ball-by-ball data comes from [Cricsheet](https://cricsheet.org), maintained by
+Stephen Rushe, and is licensed under the
+[Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
+Derived tables built from that data (everything under `data/v1/`) inherit the
+same CC BY-SA 4.0 terms: attribute Cricsheet and share adaptations alike.
+The pinned snapshot is recorded in `data/MANIFEST`.
+
 Canonical cricket game-state representation and deterministic reconstruction from
 Cricsheet ball-by-ball data. Zero machine learning: a validated deterministic
 automaton. See [`docs/SPEC_M1.md`](docs/SPEC_M1.md) for the authoritative spec.

@@ -24,7 +24,7 @@ from cricstate.download import DATA_DIR, snapshot_dir
 from cricstate.parser import ParsedMatch, parse_match
 from cricstate.quarantine import QuarantineError, QuarantineRecord, ReasonCode
 from cricstate.replay import match_warnings, replay_parsed
-from cricstate.schemas import WicketKind
+from cricstate.transition import NON_DISMISSALS
 
 V1_DIR = DATA_DIR / "v1"
 QUARANTINE_DIR = DATA_DIR / "quarantine"
@@ -140,7 +140,7 @@ def _delivery_rows(pm: ParsedMatch, split: str) -> tuple[list[dict[str, Any]], s
         h.update(repr(pre).encode())
         h.update(repr(d).encode())
         h.update(repr(post).encode())
-        n_wkts = sum(1 for w in d.wickets if w.kind is not WicketKind.RETIRED_HURT)
+        n_wkts = sum(1 for w in d.wickets if w.kind not in NON_DISMISSALS)
         rows.append(
             {
                 "schema_version": pre.schema_version,

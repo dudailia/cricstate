@@ -6,10 +6,10 @@ Snapshot: `snapshot_2026-07-02` (see `data/MANIFEST`). Scope: T20 + ODI.
 
 - Files in snapshot: **22211**
 - In-scope matches (T20/ODI): **16905**
-- Parsed + replayed clean: **16737** (99.006%)
+- Parsed + replayed clean: **16754** (99.107%)
 - Parse-or-quarantine-with-reason: **100.000%** (DoD ≥ 99.5%)
-- Delivery rows: **4742942**
-- Miscounted-over warnings (non-fatal): 290
+- Delivery rows: **4748382**
+- Miscounted-over warnings (non-fatal): 291
 
 ## Quarantine histogram
 
@@ -18,7 +18,6 @@ Snapshot: `snapshot_2026-07-02` (see `data/MANIFEST`). Scope: T20 + ODI.
 | E_BALL_ACCOUNTING | 149 |
 | E_DEAD_STATE | 2 |
 | E_FORMAT_OOS | 5306 |
-| E_UNKNOWN_WICKET_KIND | 17 |
 
 ## Temporal split (80/10/10 by start date, baked into the tables)
 
@@ -26,14 +25,14 @@ Snapshot: `snapshot_2026-07-02` (see `data/MANIFEST`). Scope: T20 + ODI.
 
 ## Determinism
 
-- Run 1 corpus hash: `e6de4df917e4d2c5240b021a68cdee1491bedc3bf26c0d7bb4a240cdc86576b6`
-- Run 2 corpus hash: `e6de4df917e4d2c5240b021a68cdee1491bedc3bf26c0d7bb4a240cdc86576b6`
+- Run 1 corpus hash: `54c2a2ef435bb0c8ca9a5595536982a5f50efe29c86c64802dde79a2e650956f`
+- Run 2 corpus hash: `54c2a2ef435bb0c8ca9a5595536982a5f50efe29c86c64802dde79a2e650956f`
 - Identical: **True**
 
 ## Runtime (Apple Silicon laptop, single process)
 
-- Run 1 (with parquet write): 342.3s
-- Run 2 (hash-only re-run): 236.9s
+- Run 1 (with parquet write): 592.3s
+- Run 2 (hash-only re-run): 456.9s
 
 ## Notes
 

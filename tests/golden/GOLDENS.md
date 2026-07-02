@@ -16,3 +16,4 @@ snapshot copy. IDs are Cricsheet match IDs (ESPNcricinfo).
 | 8 | No-result match | 1409478 | T20 | `outcome.result = "no result"` — parse, flag, exclude from tuples |
 | 9 | Concussion replacement | 1334913 | T20 | `delivery.replacements.role` with `reason = "concussion"` (L Tywaku → KI Simmonds) |
 | 10 | Wide with runs | 1534732 | T20 | delivery with `extras.wides = 2` (crossing parity uses wides − 1) |
+| 11 | Retired not out (M1.1) | 1283034 | T20 | wicket `kind = "retired not out"` (OH Agbomadzie) — retired-hurt semantics, not a dismissal |

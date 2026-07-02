@@ -10,3 +10,6 @@ data_version=1.2.0
 # Pinning 1.1.0 would quarantine 100% of the corpus and make the >=99.5%
 # acceptance bar unsatisfiable, so the pin follows the snapshot: 1.2.0.
 # 370 further matches are withheld upstream by Cricsheet (Afghanistan policy).
+# M1.1 (2026-07-02): WicketKind gained RETIRED_NOT_OUT (retired-hurt
+# semantics); corpus regenerated from the same pinned snapshot — parse counts
+# and determinism hash updated in docs/STATS.md. Snapshot bytes unchanged.

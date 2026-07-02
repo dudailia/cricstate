@@ -83,6 +83,20 @@ def test_retired_hurt_golden_does_not_count_as_wicket() -> None:
                 assert (post.runs, post.legal_balls) not in post.fow[-1:] or not post.fow
 
 
+def test_retired_not_out_golden_replays_without_dismissal() -> None:
+    from cricstate.transition import NON_DISMISSALS
+
+    pm = load_match(GOLDEN / "1283034.json")
+    saw = False
+    for pre, d, post in replay_parsed(pm):
+        if any(w.kind is WicketKind.RETIRED_NOT_OUT for w in d.wickets):
+            saw = True
+        real = sum(1 for w in d.wickets if w.kind not in NON_DISMISSALS)
+        assert post.wickets - pre.wickets == real
+        assert len(post.fow) == post.wickets
+    assert saw
+
+
 def test_dl_golden_carries_revised_target() -> None:
     pm = load_match(GOLDEN / "1499666.json")
     chase = [t for t in replay_parsed(pm) if t[0].innings_idx == 2]

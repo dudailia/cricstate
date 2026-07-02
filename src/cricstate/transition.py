@@ -16,6 +16,9 @@ from dataclasses import replace
 from cricstate.quarantine import QuarantineError, ReasonCode
 from cricstate.schemas import BatterState, BowlerState, Delivery, MatchState, WicketKind
 
+# Retirements vacate the crease but are NOT dismissals (batter may return).
+NON_DISMISSALS = frozenset({WicketKind.RETIRED_HURT, WicketKind.RETIRED_NOT_OUT})
+
 # Dismissal kinds credited to the bowler in their ledger.
 BOWLER_CREDITED = frozenset(
     {
@@ -110,11 +113,11 @@ def apply(state: MatchState, event: Delivery) -> MatchState:
     fow = state.fow
     fell = False
     for w in event.wickets:
-        if w.kind is not WicketKind.RETIRED_HURT:
+        if w.kind not in NON_DISMISSALS:
             wickets += 1
             fow = (*fow, (runs, legal_balls))
             fell = True
-        # vacate the departing batter's slot (retired hurt vacates too)
+        # vacate the departing batter's slot (retirements vacate too)
         if striker is not None and striker.player_id == w.player_out:
             striker = None
         elif non_striker is not None and non_striker.player_id == w.player_out:

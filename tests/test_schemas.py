@@ -40,6 +40,7 @@ def test_wicket_kind_covers_spec_enum_exactly() -> None:
         "hit wicket",
         "retired out",
         "retired hurt",
+        "retired not out",
         "obstructing the field",
         "timed out",
         "hit the ball twice",

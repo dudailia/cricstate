@@ -154,6 +154,16 @@ def test_retired_hurt_vacates_but_is_not_a_dismissal() -> None:
     assert s.partnership_balls == 1  # partnership survives a retirement
 
 
+def test_retired_not_out_has_retired_hurt_semantics() -> None:
+    w = Wicket(player_out="s1", kind=WicketKind.RETIRED_NOT_OUT)
+    s = apply(fresh_state(), ball(wickets=(w,)))
+    assert s.wickets == 0  # not a dismissal
+    assert s.fow == ()
+    assert s.striker is None  # slot vacated; batter may return
+    assert s.bowler.wickets == 0
+    assert s.partnership_balls == 1  # partnership survives a retirement
+
+
 def test_stumping_off_wide_dismisses_without_legal_ball() -> None:
     w = Wicket(player_out="s1", kind=WicketKind.STUMPED, fielders=("k1",))
     s = apply(fresh_state(), ball(wides=1, wickets=(w,)))

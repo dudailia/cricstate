@@ -16,6 +16,7 @@ class WicketKind(StrEnum):
     HIT_WICKET = "hit wicket"
     RETIRED_OUT = "retired out"
     RETIRED_HURT = "retired hurt"  # NOT a dismissal: does not increment wickets
+    RETIRED_NOT_OUT = "retired not out"  # M1.1: same semantics as retired hurt
     OBSTRUCTING = "obstructing the field"
     TIMED_OUT = "timed out"
     HIT_TWICE = "hit the ball twice"

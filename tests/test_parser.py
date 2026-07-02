@@ -132,7 +132,7 @@ def test_unknown_wicket_kind_quarantines() -> None:
         for ov in inn["overs"]:
             for dl in ov["deliveries"]:
                 for w in dl.get("wickets", []):
-                    w["kind"] = "retired not out"
+                    w["kind"] = "handled the ball"  # folded into obstructing; not in enum
     assert reason_of(raw) is ReasonCode.E_UNKNOWN_WICKET_KIND
 
 
