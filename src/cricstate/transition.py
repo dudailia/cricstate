@@ -34,7 +34,10 @@ def innings_active(s: MatchState) -> bool:
         return False
     if s.legal_balls >= s.max_balls:
         return False
-    if s.target is not None and s.runs >= s.target:
+    # Under D/L the operative target varies with each interruption and only the
+    # final revision is recorded, so reaching the stored target mid-innings is
+    # not reliable evidence of a dead innings (observed corpus-wide).
+    if s.target is not None and s.runs >= s.target and not s.dls_applied:
         return False
     return True
 

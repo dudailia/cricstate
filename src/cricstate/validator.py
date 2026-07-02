@@ -16,6 +16,7 @@ IN_SCOPE_MATCH_TYPES = frozenset({"T20", "ODI"})
 _INFO_KEYS = frozenset(
     {
         "balls_per_over",
+        "bowl_out",
         "city",
         "dates",
         "event",

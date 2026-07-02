@@ -50,6 +50,15 @@ python_version = "3.12"
 files = ["src", "tests"]
 warn_unreachable = true
 
+[[tool.mypy.overrides]]
+# pyarrow ships no type stubs; calls into it can't be checked
+module = "pyarrow.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "cricstate.build"
+disallow_untyped_calls = false
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # src on pythonpath directly: uv's editable .pth install is unreliable on

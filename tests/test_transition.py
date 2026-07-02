@@ -184,6 +184,14 @@ def test_target_reached_is_terminal() -> None:
         apply(s, ball())
 
 
+def test_dl_innings_may_continue_past_recorded_target() -> None:
+    # only the final D/L revision is recorded; earlier operative targets were
+    # higher, so play legitimately continues past the stored number
+    s = fresh_state(target=150, runs=150, dls_applied=True)
+    assert innings_active(s)
+    assert apply(s, ball()).runs == 150
+
+
 def test_unknown_batter_with_full_crease_quarantines() -> None:
     s = apply(fresh_state(), ball())  # crease now occupied by s1/n1
     with pytest.raises(QuarantineError) as exc:
