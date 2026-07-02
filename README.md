@@ -27,3 +27,13 @@ uv run mypy
 uv run python -m cricstate.download   # fetch + hash the Cricsheet snapshot
 uv run python -m cricstate.build      # full-corpus build → data/v1/ + docs/STATS.md
 ```
+
+## Known macOS quirk
+
+uv sets the macOS `UF_HIDDEN` flag on `.venv` contents, and CPython 3.12 skips
+hidden `.pth` files — which silently breaks the editable install
+(`ModuleNotFoundError: cricstate`). If that happens after a fresh `uv sync`:
+
+```
+chflags -R nohidden .venv
+```
