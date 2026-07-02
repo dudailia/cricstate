@@ -383,6 +383,7 @@ def write_stats(run1: BuildResult, run2: BuildResult) -> None:
     parse_rate = 100.0 * run1.n_parsed / run1.n_in_scope
     poq_rate = 100.0 * (run1.n_parsed + in_scope_quarantined) / run1.n_in_scope
     other_examples = [q for q in run1.quarantines if q.reason is ReasonCode.E_OTHER][:5]
+    n_quarantined = len(run1.quarantines)
     lines = [
         "# STATS — v1 corpus build",
         "",
@@ -390,9 +391,12 @@ def write_stats(run1: BuildResult, run2: BuildResult) -> None:
         "",
         "## Corpus",
         "",
-        f"- Files in snapshot: **{run1.n_files}**",
+        # Two denominators, always reported together and never blended:
+        # total file disposition vs in-scope parse-clean rate.
+        f"- File disposition: **{run1.n_files} files = {run1.n_parsed} parsed "
+        f"+ {n_quarantined} quarantined-with-reason**",
         f"- In-scope matches (T20/ODI): **{run1.n_in_scope}**",
-        f"- Parsed + replayed clean: **{run1.n_parsed}** ({parse_rate:.3f}%)",
+        f"- In-scope parse-clean rate: **{run1.n_parsed}/{run1.n_in_scope} = {parse_rate:.3f}%**",
         f"- Parse-or-quarantine-with-reason: **{poq_rate:.3f}%** (DoD ≥ 99.5%)",
         f"- Delivery rows: **{run1.n_delivery_rows}**",
         f"- Miscounted-over warnings (non-fatal): {len(run1.warnings)}",

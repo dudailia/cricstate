@@ -4,9 +4,9 @@ Snapshot: `snapshot_2026-07-02` (see `data/MANIFEST`). Scope: T20 + ODI.
 
 ## Corpus
 
-- Files in snapshot: **22211**
+- File disposition: **22211 files = 16754 parsed + 5457 quarantined-with-reason**
 - In-scope matches (T20/ODI): **16905**
-- Parsed + replayed clean: **16754** (99.107%)
+- In-scope parse-clean rate: **16754/16905 = 99.107%**
 - Parse-or-quarantine-with-reason: **100.000%** (DoD ≥ 99.5%)
 - Delivery rows: **4748382**
 - Miscounted-over warnings (non-fatal): 291
