@@ -52,6 +52,9 @@ warn_unreachable = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# src on pythonpath directly: uv's editable .pth install is unreliable on
+# macOS (UF_HIDDEN files are skipped by CPython 3.12 site processing).
+pythonpath = ["src"]
 addopts = "-q --strict-markers"
 markers = [
     "corpus: tests that require the full downloaded Cricsheet snapshot",
