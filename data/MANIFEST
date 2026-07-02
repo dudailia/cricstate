@@ -1,0 +1,12 @@
+source=https://cricsheet.org/downloads/all_json.zip
+snapshot_date=2026-07-02
+snapshot_dir=snapshot_2026-07-02
+sha256=2c9d8d39557bda411450c3c258da69bc9a593a7d24fda9bc5cb46a9e8ad4ab07
+n_json_files=22211
+archive_last_modified=2026-06-29T15:34:50Z
+data_version=1.2.0
+# NOTE (spec deviation, documented): SPEC_M1 §2/§5 pins Cricsheet data_version
+# 1.1.0, but the archive available at snapshot time ships 1.2.0 exclusively.
+# Pinning 1.1.0 would quarantine 100% of the corpus and make the >=99.5%
+# acceptance bar unsatisfiable, so the pin follows the snapshot: 1.2.0.
+# 370 further matches are withheld upstream by Cricsheet (Afghanistan policy).
