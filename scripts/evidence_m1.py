@@ -133,7 +133,11 @@ def main() -> None:
         "",
         "## (6) CI",
         "",
-        "_Pending GitHub remote — filled in after push (see P0.d.6)._",
+        "Remote: `github.com/dudailia/cricstate` (private). First cloud run on `main`",
+        "(commit `07a52ca`, the M1.1 patch): **green** — lint, type-check (mypy",
+        "--strict), and the non-corpus test suite all passed.",
+        "",
+        "Run link: https://github.com/dudailia/cricstate/actions/runs/28619632017",
     ]
     OUT.write_text("\n".join(lines) + "\n")
     print(f"wrote {OUT}")
