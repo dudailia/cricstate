@@ -1,0 +1,58 @@
+[project]
+name = "cricstate"
+version = "0.1.0"
+description = "Module 1: canonical cricket game-state representation + deterministic reconstruction from Cricsheet ball-by-ball data"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "polars>=1.0",
+    "pyarrow>=17.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "hypothesis>=6.100",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pre-commit>=3.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cricstate"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",      # pycodestyle / pyflakes
+    "I",                # isort
+    "UP",               # pyupgrade
+    "B",                # bugbear
+    "BLE",              # blind-except — enforces "no silent exception handling"
+    "S110", "S112",     # try-except-pass / try-except-continue
+    "RUF",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+files = ["src", "tests"]
+warn_unreachable = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "corpus: tests that require the full downloaded Cricsheet snapshot",
+]

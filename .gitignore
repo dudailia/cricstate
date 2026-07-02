@@ -1,0 +1,16 @@
+# Data — raw snapshot, extracted corpus, and build outputs stay out of git.
+# Golden files live in tests/golden/ and ARE committed.
+data/raw/
+data/quarantine/
+data/v1/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+dist/
+*.egg-info/
