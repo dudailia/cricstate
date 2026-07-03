@@ -17,20 +17,9 @@ TOL = 1e-9
 
 
 def _grid(model: B1TableT2) -> np.ndarray:
-    """p̂ over the full (innings, phase, wickets, rate) lattice via lookup
-    (unseen leaves fall back to their parent, exactly as prediction does)."""
-    assert model.table is not None, "fit first"
-    keys = np.array(
-        [
-            (i, p, w, r)
-            for i in (0, 1)
-            for p in range(N_PHASE)
-            for w in range(N_WKTS)
-            for r in range(N_RATE)
-        ],
-        dtype=np.int64,
-    )
-    return model.table.lookup(keys)[:, 0].reshape(2, N_PHASE, N_WKTS, N_RATE)
+    """p̂ over the full (innings, phase, wickets, rate) lattice — exactly the
+    grid predictions index into (amendment #3: smoothed by construction)."""
+    return model.lattice()
 
 
 def check_b1_t2_monotonicity(model: B1TableT2) -> list[str]:

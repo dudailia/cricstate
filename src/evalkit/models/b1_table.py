@@ -74,32 +74,80 @@ class _Table:
         return out
 
 
+N_INNINGS, N_PHASE, N_WKTS, N_RATE = 2, 4, 4, 6
+
+
+def _lattice_keys() -> NDArray[np.int64]:
+    return np.array(
+        [
+            (i, p, w, r)
+            for i in range(N_INNINGS)
+            for p in range(N_PHASE)
+            for w in range(N_WKTS)
+            for r in range(N_RATE)
+        ],
+        dtype=np.int64,
+    )
+
+
 class B1TableT2:
+    """Version 2.0 (amendment #3): post-shrinkage monotone smoothing.
+
+    The shrunken lattice is smoothed per (innings, phase) group by weighted
+    alternating PAVA — rate axis non-decreasing; wickets axis non-increasing
+    for innings 1, non-decreasing for innings 2 — weighted by train leaf
+    counts (+1 for unseen cells). Train quantities only; τ still on val,
+    scored with the ACTUAL (smoothed) model.
+    """
+
     name = "B1_table"
-    version = "1.0"
+    version = "2.0"
 
     def __init__(self, fmt: str):
         self.fmt = fmt
         self.tau: float = TAU_GRID[0]
-        self.table: _Table | None = None
+        self.grid: NDArray[np.float64] | None = None  # [2, 4, 4, 6]
+
+    def _smoothed_grid(self, table: _Table, counts: NDArray[np.float64]) -> NDArray[np.float64]:
+        from evalkit.pava import monotone_smooth_2d
+
+        raw = table.lookup(_lattice_keys())[:, 0].reshape(N_INNINGS, N_PHASE, N_WKTS, N_RATE)
+        out = np.empty_like(raw)
+        for innings in range(N_INNINGS):
+            for p in range(N_PHASE):
+                out[innings, p] = monotone_smooth_2d(
+                    raw[innings, p],
+                    counts[innings, p] + 1.0,
+                    rate_increasing=True,
+                    wickets_increasing=(innings == 1),
+                )
+        return out
 
     def fit(self, train: pl.DataFrame, val: pl.DataFrame) -> None:
         buckets = bucket_columns(train, self.fmt)
         targets = to_y(train).astype(np.float64).reshape(-1, 1)
+        counts = np.zeros((N_INNINGS, N_PHASE, N_WKTS, N_RATE))
+        np.add.at(counts, tuple(buckets.T), 1.0)
         val_buckets = bucket_columns(val, self.fmt)
         val_y = to_y(val)
-        best: tuple[float, float, _Table | None] = (np.inf, TAU_GRID[0], None)
+        best: tuple[float, float, NDArray[np.float64] | None] = (np.inf, TAU_GRID[0], None)
         for tau in TAU_GRID:
-            table = _Table(buckets, targets, tau)
-            p = np.clip(table.lookup(val_buckets)[:, 0], 1e-6, 1 - 1e-6)
+            grid = self._smoothed_grid(_Table(buckets, targets, tau), counts)
+            p = np.clip(grid[tuple(val_buckets.T)], 1e-6, 1 - 1e-6)
             score = nll_binary(p, val_y)
             if score < best[0]:
-                best = (score, tau, table)
-        _, self.tau, self.table = best
+                best = (score, tau, grid)
+        _, self.tau, self.grid = best
+
+    def lattice(self) -> NDArray[np.float64]:
+        assert self.grid is not None, "fit first"
+        return self.grid
 
     def predict_proba(self, df: pl.DataFrame) -> NDArray[np.float64]:
-        assert self.table is not None, "fit first"
-        return np.clip(self.table.lookup(bucket_columns(df, self.fmt))[:, 0], 1e-6, 1 - 1e-6)
+        assert self.grid is not None, "fit first"
+        buckets = bucket_columns(df, self.fmt)
+        result: NDArray[np.float64] = np.clip(self.grid[tuple(buckets.T)], 1e-6, 1 - 1e-6)
+        return result
 
 
 class B1TableT1:

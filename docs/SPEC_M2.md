@@ -15,3 +15,16 @@
   inferred: legal_balls == 0 → lowest CRR band. Monotonicity, innings 1,
   corrected: holding phase and wickets fixed, p̂ non-decreasing in CRR band;
   non-increasing in wickets band as already specified. Innings 2 unchanged.
+- **Amendment #3 (P4 gate, 2026-07-03) — B1 monotone by construction:**
+  post-shrinkage, B1 (T2) applies weighted alternating PAVA over each
+  (innings, phase) lattice: non-decreasing along the rate band (CRR/RRR
+  ascending) and along the wickets axis non-increasing for innings 1 /
+  non-decreasing for innings 2. Fit on TRAIN quantities only. The
+  monotonicity property tests must pass by construction; if PAVA measurably
+  worsens B1 val NLL beyond noise, STOP and report.
+- **Amendment #4 (P4 gate, 2026-07-03) — artifact cache & runtime budget:**
+  P4 caches fitted model + calibration artifacts; run-all re-evaluates from
+  cache rather than re-fitting. Budget: cold fit < 60 min (documented),
+  cached eval-only run-all < 5 min. Fits are deterministic and the cache is
+  fingerprinted (corpus hash, labels hash, model version, seed) so validity
+  is checkable.

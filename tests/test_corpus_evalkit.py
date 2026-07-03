@@ -78,6 +78,23 @@ def test_real_corpus_labels_total_partition(
     assert labels_hash(labels) == labels_hash(build_labels(matches, deliveries))
 
 
+@pytest.mark.parametrize("fmt", ["t20", "odi"])
+def test_b1_t2_monotone_by_construction(
+    matches: pl.DataFrame, deliveries: pl.DataFrame, fmt: str
+) -> None:
+    """Amendment #3: PAVA-smoothed B1 must satisfy the §5 property exactly."""
+    from evalkit.datasets import assemble_t2
+    from evalkit.models.b1_table import B1TableT2
+    from evalkit.monotonicity import check_b1_t2_monotonicity
+
+    model = B1TableT2(fmt)
+    model.fit(
+        assemble_t2(deliveries, matches, fmt, "train"),
+        assemble_t2(deliveries, matches, fmt, "val"),
+    )
+    assert check_b1_t2_monotonicity(model) == []
+
+
 def test_features_build_over_val_slice(deliveries: pl.DataFrame) -> None:
     val = deliveries.filter(pl.col("temporal_split") == "val")
     out = build_features(val)

@@ -4,6 +4,9 @@ data/raw/
 data/quarantine/
 data/v1/
 
+# Fitted-model cache (amendment #4) — regenerable, fingerprint-pinned
+artifacts/
+
 # Python
 __pycache__/
 *.pyc
