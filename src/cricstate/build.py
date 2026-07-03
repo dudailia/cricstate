@@ -132,6 +132,15 @@ MATCH_SCHEMA: dict[str, Any] = {
 }
 
 
+PLAYER_SCHEMA: dict[str, Any] = {
+    "player_id": pl.Utf8,
+    "name": pl.Utf8,
+    "n_matches": pl.Int64,
+    "first_seen": pl.Date,
+    "last_seen": pl.Date,
+}
+
+
 @dataclass
 class PlayerAgg:
     name: str
@@ -393,7 +402,8 @@ def build(write_parquet: bool = True) -> BuildResult:
                     "last_seen": agg.last_seen,
                 }
                 for pid, agg in sorted(players.items())
-            ]
+            ],
+            schema=PLAYER_SCHEMA,
         ).write_parquet(V1_DIR / "players.parquet")
         pl.DataFrame(
             [

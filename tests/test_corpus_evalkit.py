@@ -36,6 +36,34 @@ def test_real_split_metadata_shape(matches: pl.DataFrame, deliveries: pl.DataFra
     assert set(meta.fmt_match_counts) == {"t20", "odi"}
 
 
+def test_actual_parquet_schemas_equal_goldens() -> None:
+    from evalkit.freeze import load_golden, schema_as_dict
+
+    for name in ("matches", "deliveries", "players"):
+        actual = schema_as_dict(pl.read_parquet(V1 / f"{name}.parquet").schema)
+        assert actual == load_golden(name), f"{name} schema drifted from golden"
+
+
+def test_pinned_corpus_hash_recomputes_from_parquet(matches: pl.DataFrame) -> None:
+    """The build's corpus hash is reconstructible from per-match stream hashes
+    in parquet row order (= sorted-file order); drift = red build."""
+    import hashlib
+
+    from evalkit.freeze import PINNED_CORPUS_HASH
+
+    h = hashlib.sha256()
+    for mid, sh in matches.select("match_id", "stream_hash").iter_rows():
+        h.update(f"{mid}:{sh}\n".encode())
+    assert h.hexdigest() == PINNED_CORPUS_HASH
+
+
+def test_pinned_labels_hash_recomputes(matches: pl.DataFrame, deliveries: pl.DataFrame) -> None:
+    from evalkit.freeze import PINNED_LABELS_HASH
+    from evalkit.labels import build_labels, labels_hash
+
+    assert labels_hash(build_labels(matches, deliveries)) == PINNED_LABELS_HASH
+
+
 def test_real_corpus_labels_total_partition(
     matches: pl.DataFrame, deliveries: pl.DataFrame
 ) -> None:

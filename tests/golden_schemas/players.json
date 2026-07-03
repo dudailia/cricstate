@@ -1,0 +1,7 @@
+{
+ "player_id": "String",
+ "name": "String",
+ "n_matches": "Int64",
+ "first_seen": "Date",
+ "last_seen": "Date"
+}

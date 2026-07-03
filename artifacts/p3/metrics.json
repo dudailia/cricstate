@@ -1,0 +1,522 @@
+{
+ "t1/t20": {
+  "n_train": 2409881,
+  "n_val": 340375,
+  "models": {
+   "B0_marginal": {
+    "seed": 1337,
+    "fit_seconds": 0.0,
+    "pre": {
+     "nll": 1.6959701031439152,
+     "brier": 0.7574871545095031,
+     "ece": 0.004970846281220038
+    },
+    "post": {
+     "nll": 1.6953237526876055,
+     "brier": 0.7573061960376295,
+     "ece": 0.004721938650278686
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0396
+    }
+   },
+   "B1_table": {
+    "seed": 1337,
+    "fit_seconds": 32.9,
+    "pre": {
+     "nll": 1.6603897684625804,
+     "brier": 0.7418497887162664,
+     "ece": 0.004942047078467152
+    },
+    "post": {
+     "nll": 1.659498264495189,
+     "brier": 0.7415942606447415,
+     "ece": 0.004278553279642378
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0453
+    },
+    "tau": 200.0
+   },
+   "B2_logistic": {
+    "seed": 1337,
+    "fit_seconds": 845.9,
+    "pre": {
+     "nll": 1.6413585444053924,
+     "brier": 0.7359563570741505,
+     "ece": 0.005080869268693492
+    },
+    "post": {
+     "nll": 1.6406936333259592,
+     "brier": 0.7357522210573805,
+     "ece": 0.004525726367769185
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0387
+    },
+    "C": 10.0
+   },
+   "B3_gbm": {
+    "seed": 1337,
+    "fit_seconds": 1200.9,
+    "pre": {
+     "nll": 1.6267207063293174,
+     "brier": 0.7311498546439368,
+     "ece": 0.004173736257270733
+    },
+    "post": {
+     "nll": 1.6260430090679927,
+     "brier": 0.730921928392757,
+     "ece": 0.0033986517402868547
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0392
+    },
+    "n_iter": 125
+   }
+  },
+  "canaries": {
+   "ladder_inversion": {
+    "passed": true,
+    "detail": "B0 1.695970, B2 1.641359 (ok=True), B3 1.626721 (ok=True)"
+   },
+   "shuffled_target": {
+    "passed": true,
+    "detail": "shuffled-B2 val NLL 1.695989 vs B0 1.695970 (delta +0.000019, eps 0.01)"
+   }
+  },
+  "runtime_seconds": 2282.9
+ },
+ "t1/odi": {
+  "n_train": 1451638,
+  "n_val": 79758,
+  "models": {
+   "B0_marginal": {
+    "seed": 1337,
+    "fit_seconds": 0.0,
+    "pre": {
+     "nll": 1.3951933267823584,
+     "brier": 0.658838941061561,
+     "ece": 0.0022611888607402203
+    },
+    "post": {
+     "nll": 1.3951672961596675,
+     "brier": 0.6588107192842226,
+     "ece": 0.001962138351678976
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0068
+    }
+   },
+   "B1_table": {
+    "seed": 1337,
+    "fit_seconds": 24.6,
+    "pre": {
+     "nll": 1.3600268459588833,
+     "brier": 0.6406151267284093,
+     "ece": 0.0036434114796425497
+    },
+    "post": {
+     "nll": 1.3600013658946704,
+     "brier": 0.6405778429555765,
+     "ece": 0.003519478751598937
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0067
+    },
+    "tau": 800.0
+   },
+   "B2_logistic": {
+    "seed": 1337,
+    "fit_seconds": 127.7,
+    "pre": {
+     "nll": 1.3523700417373028,
+     "brier": 0.6363974893323309,
+     "ece": 0.004664640333954701
+    },
+    "post": {
+     "nll": 1.3523700398173726,
+     "brier": 0.6363978224040013,
+     "ece": 0.004667578502036743
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 0.9999
+    },
+    "C": 0.01
+   },
+   "B3_gbm": {
+    "seed": 1337,
+    "fit_seconds": 520.3,
+    "pre": {
+     "nll": 1.339250773694315,
+     "brier": 0.6314762153190937,
+     "ece": 0.003214069735717105
+    },
+    "post": {
+     "nll": 1.3392076649456661,
+     "brier": 0.6314296872263984,
+     "ece": 0.0030089829671862095
+    },
+    "calibration": {
+     "method": "temperature",
+     "T": 1.0087
+    },
+    "n_iter": 50
+   }
+  },
+  "canaries": {
+   "ladder_inversion": {
+    "passed": true,
+    "detail": "B0 1.395193, B2 1.352370 (ok=True), B3 1.339251 (ok=True)"
+   },
+   "shuffled_target": {
+    "passed": true,
+    "detail": "shuffled-B2 val NLL 1.394732 vs B0 1.395193 (delta -0.000461, eps 0.01)"
+   }
+  },
+  "runtime_seconds": 761.0
+ },
+ "t2/t20": {
+  "n_train": 2400926,
+  "n_val": 339411,
+  "models": {
+   "B0_marginal": {
+    "seed": 1337,
+    "fit_seconds": 0.0,
+    "pre": {
+     "nll": 0.6946804179864339,
+     "brier": 0.25076604487575443,
+     "ece": 0.028777361780983113
+    },
+    "post_platt": {
+     "nll": 0.6930229920682979,
+     "brier": 0.2499379083246824,
+     "ece": 3.8857321471574835e-08
+    },
+    "post_isotonic": {
+     "nll": 0.6930229920682948,
+     "brier": 0.2499379083246809,
+     "ece": 0.0
+    },
+    "calibration": {
+     "leaderboard_method": "isotonic",
+     "n_labeled_val_matches": 1477,
+     "platt": {
+      "a": -0.0026,
+      "b": 0.0313
+     }
+    }
+   },
+   "B1_table": {
+    "seed": 1337,
+    "fit_seconds": 30.1,
+    "pre": {
+     "nll": 0.5482506034688313,
+     "brier": 0.18781175876687994,
+     "ece": 0.016254939627294504
+    },
+    "post_platt": {
+     "nll": 0.5477600300438121,
+     "brier": 0.18768400094315438,
+     "ece": 0.012229271752072956
+    },
+    "post_isotonic": {
+     "nll": 0.5455782920009745,
+     "brier": 0.18704902476245897,
+     "ece": 6.408844193536607e-17
+    },
+    "calibration": {
+     "leaderboard_method": "isotonic",
+     "n_labeled_val_matches": 1477,
+     "platt": {
+      "a": 0.9368,
+      "b": 0.0385
+     }
+    },
+    "tau": 200.0
+   },
+   "B2_logistic": {
+    "seed": 1337,
+    "fit_seconds": 48.9,
+    "pre": {
+     "nll": 0.5223536122566279,
+     "brier": 0.17808384690324366,
+     "ece": 0.007103936509310643
+    },
+    "post_platt": {
+     "nll": 0.5222507618130946,
+     "brier": 0.17806606930210034,
+     "ece": 0.006977464984184769
+    },
+    "post_isotonic": {
+     "nll": 0.5205444268565178,
+     "brier": 0.17781270567147325,
+     "ece": 7.5693232986964e-17
+    },
+    "calibration": {
+     "leaderboard_method": "isotonic",
+     "n_labeled_val_matches": 1477,
+     "platt": {
+      "a": 0.9659,
+      "b": -0.0123
+     }
+    },
+    "C": 10.0
+   },
+   "B3_gbm": {
+    "seed": 1337,
+    "fit_seconds": 117.2,
+    "pre": {
+     "nll": 0.5102101260055264,
+     "brier": 0.1742723543956693,
+     "ece": 0.017508765323457826
+    },
+    "post_platt": {
+     "nll": 0.5091733279031719,
+     "brier": 0.1738819925840877,
+     "ece": 0.010909935067071603
+    },
+    "post_isotonic": {
+     "nll": 0.5076494061868363,
+     "brier": 0.17351792597459945,
+     "ece": 9.306389648773892e-17
+    },
+    "calibration": {
+     "leaderboard_method": "isotonic",
+     "n_labeled_val_matches": 1477,
+     "platt": {
+      "a": 0.898,
+      "b": -0.01
+     }
+    },
+    "n_iter": 150
+   }
+  },
+  "canaries": {
+   "ladder_inversion": {
+    "passed": true,
+    "detail": "B0 0.694680, B2 0.522354 (ok=True), B3 0.510210 (ok=True)"
+   },
+   "shuffled_target": {
+    "passed": true,
+    "detail": "shuffled-B2 val NLL 0.693200 vs B0 0.694680 (delta -0.001481, eps 0.01)"
+   }
+  },
+  "monotonicity": {
+   "violations": [
+    "innings1 phase0 wkts2: not non-decreasing in rate band ([0.1795, 0.2194, 0.2121, 0.3015, 0.2388, 0.2508])",
+    "innings1 phase0 wkts3: not non-decreasing in rate band ([0.2114, 0.2972, 0.2993, 0.293, 0.3048, 0.3048])",
+    "innings1 phase0 rate0: not non-increasing in wickets band ([0.4116, 0.2179, 0.1795, 0.2114])",
+    "innings1 phase0 rate1: not non-increasing in wickets band ([0.4701, 0.3276, 0.2194, 0.2972])",
+    "innings1 phase0 rate2: not non-increasing in wickets band ([0.5194, 0.4136, 0.2121, 0.2993])",
+    "innings1 phase0 rate4: not non-increasing in wickets band ([0.6123, 0.5612, 0.2388, 0.3048])",
+    "innings1 phase0 rate5: not non-increasing in wickets band ([0.6247, 0.6591, 0.2508, 0.3048])",
+    "innings1 phase1 wkts2: not non-decreasing in rate band ([0.1334, 0.2455, 0.355, 0.5248, 0.5864, 0.4951])",
+    "innings1 phase1 wkts3: not non-decreasing in rate band ([0.0729, 0.1834, 0.1848, 0.2826, 0.3295, 0.1675])",
+    "innings1 phase1 rate4: not non-increasing in wickets band ([0.7339, 0.7467, 0.5864, 0.3295])",
+    "innings1 phase1 rate5: not non-increasing in wickets band ([0.7987, 0.7999, 0.4951, 0.1675])",
+    "innings1 phase2 wkts0: not non-decreasing in rate band ([0.7379, 0.6111, 0.6499, 0.7185, 0.8327, 0.8593])",
+    "innings1 phase2 wkts2: not non-decreasing in rate band ([0.1394, 0.287, 0.4208, 0.6336, 0.7458, 0.6112])",
+    "innings1 phase2 wkts3: not non-decreasing in rate band ([0.0768, 0.1852, 0.3141, 0.5154, 0.5735, 0.2504])",
+    "innings1 phase3 wkts0: not non-decreasing in rate band ([0.8148, 0.791, 0.7469, 0.8316, 0.8635, 0.9254])",
+    "innings1 phase3 wkts1: not non-decreasing in rate band ([0.4642, 0.4505, 0.5839, 0.7047, 0.851, 0.8964])",
+    "innings1 phase3 wkts2: not non-decreasing in rate band ([0.269, 0.3335, 0.4709, 0.6588, 0.8451, 0.8065])",
+    "innings1 phase3 wkts3: not non-decreasing in rate band ([0.0803, 0.2045, 0.3668, 0.6052, 0.7964, 0.5723])",
+    "innings2 phase0 wkts2: not non-decreasing in rate band ([0.5493, 0.6109, 0.7334, 0.8931, 0.9187, 0.9148])",
+    "innings2 phase0 wkts3: not non-decreasing in rate band ([0.648, 0.6512, 0.6971, 0.7087, 0.6705, 0.713])",
+    "innings2 phase0 rate2: not non-decreasing in wickets band ([0.3563, 0.5115, 0.7334, 0.6971])",
+    "innings2 phase0 rate3: not non-decreasing in wickets band ([0.6054, 0.7445, 0.8931, 0.7087])",
+    "innings2 phase0 rate4: not non-decreasing in wickets band ([0.8081, 0.9003, 0.9187, 0.6705])",
+    "innings2 phase0 rate5: not non-decreasing in wickets band ([0.9101, 0.93, 0.9148, 0.713])",
+    "innings2 phase3 wkts0: not non-decreasing in rate band ([0.0197, 0.0529, 0.1386, 0.1242, 0.1085, 0.4449])",
+    "innings2 phase3 rate0: not non-decreasing in wickets band ([0.0197, 0.0069, 0.0159, 0.1015])",
+    "innings2 phase3 rate1: not non-decreasing in wickets band ([0.0529, 0.0359, 0.0656, 0.2608])",
+    "innings2 phase3 rate2: not non-decreasing in wickets band ([0.1386, 0.0941, 0.1536, 0.3861])"
+   ],
+   "passed": false
+  },
+  "runtime_seconds": 205.4
+ },
+ "t2/odi": {
+  "n_train": 1437925,
+  "n_val": 79758,
+  "models": {
+   "B0_marginal": {
+    "seed": 1337,
+    "fit_seconds": 0.0,
+    "pre": {
+     "nll": 0.7014927259126403,
+     "brier": 0.25416857633957374,
+     "ece": 0.09221193847636278
+    },
+    "post_platt": {
+     "nll": 0.6844530247165646,
+     "brier": 0.24566553481510214,
+     "ece": 8.54966879082486e-06
+    },
+    "post_isotonic": {
+     "nll": 0.6844530245677921,
+     "brier": 0.2456655347420053,
+     "ece": 0.0
+    },
+    "calibration": {
+     "leaderboard_method": "platt",
+     "n_labeled_val_matches": 150,
+     "platt": {
+      "a": -0.0277,
+      "b": 0.2619
+     }
+    }
+   },
+   "B1_table": {
+    "seed": 1337,
+    "fit_seconds": 15.6,
+    "pre": {
+     "nll": 0.5543965582233192,
+     "brier": 0.18879413547494853,
+     "ece": 0.04628167286477512
+    },
+    "post_platt": {
+     "nll": 0.5485266785278442,
+     "brier": 0.18705126968802965,
+     "ece": 0.03757548815937877
+    },
+    "post_isotonic": {
+     "nll": 0.5404647175194712,
+     "brier": 0.18445501669476533,
+     "ece": 8.215417919971448e-17
+    },
+    "calibration": {
+     "leaderboard_method": "platt",
+     "n_labeled_val_matches": 150,
+     "platt": {
+      "a": 0.8662,
+      "b": 0.2151
+     }
+    },
+    "tau": 50.0
+   },
+   "B2_logistic": {
+    "seed": 1337,
+    "fit_seconds": 27.9,
+    "pre": {
+     "nll": 0.5359045761326263,
+     "brier": 0.18158080909221125,
+     "ece": 0.03400263600048408
+    },
+    "post_platt": {
+     "nll": 0.5299851689458902,
+     "brier": 0.18028976812397643,
+     "ece": 0.023694899724952655
+    },
+    "post_isotonic": {
+     "nll": 0.5254781719478615,
+     "brier": 0.17904579198327902,
+     "ece": 7.538180204562642e-17
+    },
+    "calibration": {
+     "leaderboard_method": "platt",
+     "n_labeled_val_matches": 150,
+     "platt": {
+      "a": 0.8035,
+      "b": 0.1509
+     }
+    },
+    "C": 1.0
+   },
+   "B3_gbm": {
+    "seed": 1337,
+    "fit_seconds": 44.8,
+    "pre": {
+     "nll": 0.5221910698258616,
+     "brier": 0.1781364955171751,
+     "ece": 0.03781721795512614
+    },
+    "post_platt": {
+     "nll": 0.5193950887024656,
+     "brier": 0.17704568086796035,
+     "ece": 0.028440785585162255
+    },
+    "post_isotonic": {
+     "nll": 0.5120679284760518,
+     "brier": 0.17517278958944385,
+     "ece": 1.5329737442749011e-16
+    },
+    "calibration": {
+     "leaderboard_method": "platt",
+     "n_labeled_val_matches": 150,
+     "platt": {
+      "a": 0.8885,
+      "b": 0.1401
+     }
+    },
+    "n_iter": 50
+   }
+  },
+  "canaries": {
+   "ladder_inversion": {
+    "passed": true,
+    "detail": "B0 0.701493, B2 0.535905 (ok=True), B3 0.522191 (ok=True)"
+   },
+   "shuffled_target": {
+    "passed": true,
+    "detail": "shuffled-B2 val NLL 0.694716 vs B0 0.701493 (delta -0.006777, eps 0.01)"
+   }
+  },
+  "monotonicity": {
+   "violations": [
+    "innings1 phase0 wkts0: not non-decreasing in rate band ([0.4364, 0.5654, 0.6189, 0.6404, 0.6116, 0.6024])",
+    "innings1 phase0 wkts1: not non-decreasing in rate band ([0.2516, 0.3774, 0.4675, 0.4008, 0.6515, 0.3425])",
+    "innings1 phase0 wkts2: not non-decreasing in rate band ([0.0709, 0.1978, 0.2206, 0.2821, 0.1267, 0.1267])",
+    "innings1 phase0 rate0: not non-increasing in wickets band ([0.4364, 0.2516, 0.0709, 0.0726])",
+    "innings1 phase0 rate4: not non-increasing in wickets band ([0.6116, 0.6515, 0.1267, 0.1729])",
+    "innings1 phase0 rate5: not non-increasing in wickets band ([0.6024, 0.3425, 0.1267, 0.1729])",
+    "innings1 phase1 wkts0: not non-decreasing in rate band ([0.4978, 0.6687, 0.7996, 0.824, 0.7341, 0.6576])",
+    "innings1 phase1 wkts1: not non-decreasing in rate band ([0.3318, 0.5442, 0.7231, 0.7498, 0.7447, 0.7099])",
+    "innings1 phase1 wkts2: not non-decreasing in rate band ([0.2092, 0.3759, 0.5499, 0.5973, 0.2857, 0.3506])",
+    "innings1 phase1 wkts3: not non-decreasing in rate band ([0.0659, 0.1418, 0.4065, 0.2273, 0.0955, 0.0955])",
+    "innings1 phase1 rate4: not non-increasing in wickets band ([0.7341, 0.7447, 0.2857, 0.0955])",
+    "innings1 phase1 rate5: not non-increasing in wickets band ([0.6576, 0.7099, 0.3506, 0.0955])",
+    "innings1 phase2 wkts0: not non-decreasing in rate band ([0.4919, 0.8037, 0.8655, 0.934, 0.8072, 0.8072])",
+    "innings1 phase2 wkts1: not non-decreasing in rate band ([0.4411, 0.675, 0.886, 0.9073, 0.6739, 0.6739])",
+    "innings1 phase2 wkts2: not non-decreasing in rate band ([0.3172, 0.5059, 0.7558, 0.6962, 0.4592, 0.4592])",
+    "innings1 phase2 wkts3: not non-decreasing in rate band ([0.1289, 0.3065, 0.5346, 0.5176, 0.2089, 0.2089])",
+    "innings1 phase2 rate2: not non-increasing in wickets band ([0.8655, 0.886, 0.7558, 0.5346])",
+    "innings1 phase3 wkts0: not non-decreasing in rate band ([0.8553, 0.7646, 0.9878, 0.9036, 0.8553, 0.8553])",
+    "innings1 phase3 wkts1: not non-decreasing in rate band ([0.5217, 0.7452, 0.9082, 0.8702, 0.7966, 0.7966])",
+    "innings1 phase3 wkts2: not non-decreasing in rate band ([0.3847, 0.6224, 0.8389, 0.9058, 0.6475, 0.6475])",
+    "innings1 phase3 wkts3: not non-decreasing in rate band ([0.2065, 0.4601, 0.7453, 0.8445, 0.4179, 0.4179])",
+    "innings1 phase3 rate3: not non-increasing in wickets band ([0.9036, 0.8702, 0.9058, 0.8445])",
+    "innings2 phase0 wkts0: not non-decreasing in rate band ([0.0674, 0.4433, 0.7725, 0.9072, 0.8265, 0.6328])",
+    "innings2 phase0 wkts1: not non-decreasing in rate band ([0.1814, 0.6533, 0.8936, 0.9202, 0.8676, 0.8885])",
+    "innings2 phase0 wkts2: not non-decreasing in rate band ([0.6379, 0.8638, 0.9726, 0.9307, 0.9379, 0.9077])",
+    "innings2 phase0 wkts3: not non-decreasing in rate band ([0.815, 0.9119, 0.8912, 0.8221, 0.815, 0.815])",
+    "innings2 phase0 rate2: not non-decreasing in wickets band ([0.7725, 0.8936, 0.9726, 0.8912])",
+    "innings2 phase0 rate3: not non-decreasing in wickets band ([0.9072, 0.9202, 0.9307, 0.8221])",
+    "innings2 phase0 rate4: not non-decreasing in wickets band ([0.8265, 0.8676, 0.9379, 0.815])",
+    "innings2 phase0 rate5: not non-decreasing in wickets band ([0.6328, 0.8885, 0.9077, 0.815])",
+    "innings2 phase1 wkts0: not non-decreasing in rate band ([0.0255, 0.2557, 0.593, 0.8975, 0.8204, 0.5232])",
+    "innings2 phase1 wkts1: not non-decreasing in rate band ([0.0576, 0.4065, 0.7601, 0.9168, 0.9563, 0.9523])",
+    "innings2 phase1 wkts3: not non-decreasing in rate band ([0.4779, 0.8748, 0.9906, 0.9873, 0.9954, 0.9881])",
+    "innings2 phase2 wkts0: not non-decreasing in rate band ([0.0013, 0.0584, 0.2388, 0.4234, 0.0825, 0.5867])",
+    "innings2 phase2 wkts1: not non-decreasing in rate band ([0.0126, 0.0958, 0.3545, 0.7343, 0.9449, 0.8777])",
+    "innings2 phase3 rate0: not non-decreasing in wickets band ([0.0108, 0.0011, 0.0112, 0.1222])",
+    "innings2 phase3 rate1: not non-decreasing in wickets band ([0.036, 0.0281, 0.0916, 0.4563])"
+   ],
+   "passed": false
+  },
+  "runtime_seconds": 93.7
+ },
+ "_meta": {
+  "seed": 1337,
+  "total_runtime_seconds": 3343.7,
+  "test_split_touched": false
+ }
+}
