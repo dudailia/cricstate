@@ -57,7 +57,7 @@ select = [
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["src", "tests"]
+files = ["src", "tests", "experiments"]
 warn_unreachable = true
 
 [[tool.mypy.overrides]]
@@ -73,7 +73,7 @@ disallow_untyped_calls = false
 testpaths = ["tests"]
 # src on pythonpath directly: uv's editable .pth install is unreliable on
 # macOS (UF_HIDDEN files are skipped by CPython 3.12 site processing).
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 addopts = "-q --strict-markers"
 markers = [
     "corpus: tests that require the full downloaded Cricsheet snapshot",
