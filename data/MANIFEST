@@ -13,3 +13,8 @@ data_version=1.2.0
 # M1.1 (2026-07-02): WicketKind gained RETIRED_NOT_OUT (retired-hurt
 # semantics); corpus regenerated from the same pinned snapshot — parse counts
 # and determinism hash updated in docs/STATS.md. Snapshot bytes unchanged.
+# M1.2 (2026-07-03): schema 1.1.0 — ADDITIVE ONLY: matches.parquet gained
+# outcome_eliminator + outcome_bowl_out (both nullable String); every
+# pre-existing column name and dtype unchanged. Corpus regenerated; new
+# determinism hash (schema_version is part of every hashed state):
+# c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781

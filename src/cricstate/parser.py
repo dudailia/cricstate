@@ -52,6 +52,8 @@ class ParsedMatch:
     outcome_result: str | None  # "tie" | "no result" | "draw" | None (= won)
     outcome_winner: str | None
     outcome_method: str | None
+    outcome_eliminator: str | None  # super-over winner on a tie
+    outcome_bowl_out: str | None  # pre-2008 tie resolution
     dls_applied: bool
     no_result: bool
     toss_uncontested: bool
@@ -225,6 +227,8 @@ def parse_match(raw: dict[str, Any], match_id: str) -> ParsedMatch:
         outcome_result=result,
         outcome_winner=outcome.get("winner"),
         outcome_method=method,
+        outcome_eliminator=outcome.get("eliminator"),
+        outcome_bowl_out=outcome.get("bowl_out"),
         dls_applied=bool(method and "D/L" in method),
         no_result=result == "no result",
         toss_uncontested=bool(info["toss"].get("uncontested", False)),

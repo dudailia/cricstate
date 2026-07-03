@@ -102,6 +102,36 @@ DELIVERY_SCHEMA: dict[str, Any] = {
 }
 
 
+MATCH_SCHEMA: dict[str, Any] = {
+    "schema_version": pl.Utf8,
+    "match_id": pl.Utf8,
+    "fmt": pl.Utf8,
+    "gender": pl.Utf8,
+    "venue_id": pl.Utf8,
+    "start_date": pl.Date,
+    "competition": pl.Utf8,
+    "temporal_split": pl.Utf8,
+    "team1": pl.Utf8,
+    "team2": pl.Utf8,
+    # Int64 deliberately: the pre-M1.2 table had inferred Int64 here, and the
+    # M1.2 patch is ADDITIVE ONLY — existing dtypes must not change.
+    "balls_per_over": pl.Int64,
+    "scheduled_overs": pl.Int64,
+    "outcome_result": pl.Utf8,
+    "outcome_winner": pl.Utf8,
+    "outcome_method": pl.Utf8,
+    "outcome_eliminator": pl.Utf8,
+    "outcome_bowl_out": pl.Utf8,
+    "dls_applied": pl.Boolean,
+    "no_result": pl.Boolean,
+    "toss_uncontested": pl.Boolean,
+    "has_super_over": pl.Boolean,
+    "n_innings": pl.Int64,
+    "n_deliveries": pl.Int64,
+    "stream_hash": pl.Utf8,
+}
+
+
 @dataclass
 class PlayerAgg:
     name: str
@@ -315,6 +345,8 @@ def build(write_parquet: bool = True) -> BuildResult:
                 "outcome_result": pm.outcome_result,
                 "outcome_winner": pm.outcome_winner,
                 "outcome_method": pm.outcome_method,
+                "outcome_eliminator": pm.outcome_eliminator,
+                "outcome_bowl_out": pm.outcome_bowl_out,
                 "dls_applied": pm.dls_applied,
                 "no_result": pm.no_result,
                 "toss_uncontested": pm.toss_uncontested,
@@ -350,7 +382,7 @@ def build(write_parquet: bool = True) -> BuildResult:
     res.corpus_hash = corpus.hexdigest()
 
     if write_parquet:
-        pl.DataFrame(match_rows).write_parquet(V1_DIR / "matches.parquet")
+        pl.DataFrame(match_rows, schema=MATCH_SCHEMA).write_parquet(V1_DIR / "matches.parquet")
         pl.DataFrame(
             [
                 {

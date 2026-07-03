@@ -36,6 +36,20 @@ def test_real_split_metadata_shape(matches: pl.DataFrame, deliveries: pl.DataFra
     assert set(meta.fmt_match_counts) == {"t20", "odi"}
 
 
+def test_real_corpus_labels_total_partition(
+    matches: pl.DataFrame, deliveries: pl.DataFrame
+) -> None:
+    """P2 property on real data: every in-scope match gets exactly one disposition."""
+    from evalkit.labels import Disposition, build_labels, labels_hash
+
+    labels = build_labels(matches, deliveries)
+    assert labels.height == matches.height
+    assert set(labels["disposition"].unique().to_list()) <= {d.value for d in Disposition}
+    labeled = labels.filter(pl.col("disposition") == Disposition.LABELED.value)
+    assert labeled["y"].is_in([0, 1]).all()
+    assert labels_hash(labels) == labels_hash(build_labels(matches, deliveries))
+
+
 def test_features_build_over_val_slice(deliveries: pl.DataFrame) -> None:
     val = deliveries.filter(pl.col("temporal_split") == "val")
     out = build_features(val)

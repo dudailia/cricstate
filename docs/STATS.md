@@ -25,14 +25,14 @@ Snapshot: `snapshot_2026-07-02` (see `data/MANIFEST`). Scope: T20 + ODI.
 
 ## Determinism
 
-- Run 1 corpus hash: `54c2a2ef435bb0c8ca9a5595536982a5f50efe29c86c64802dde79a2e650956f`
-- Run 2 corpus hash: `54c2a2ef435bb0c8ca9a5595536982a5f50efe29c86c64802dde79a2e650956f`
+- Run 1 corpus hash: `c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781`
+- Run 2 corpus hash: `c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781`
 - Identical: **True**
 
 ## Runtime (Apple Silicon laptop, single process)
 
-- Run 1 (with parquet write): 592.3s
-- Run 2 (hash-only re-run): 456.9s
+- Run 1 (with parquet write): 416.6s
+- Run 2 (hash-only re-run): 307.7s
 
 ## Notes
 

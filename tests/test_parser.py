@@ -34,6 +34,9 @@ def test_all_goldens_parse(match_id: str) -> None:
 def test_golden_tie_super_over() -> None:
     pm = parse("1187669")
     assert pm.outcome_result == "tie"
+    assert pm.outcome_winner is None
+    assert pm.outcome_eliminator == "England"  # M1.2: super-over winner
+    assert pm.outcome_bowl_out is None
     assert any(inn.super_over for inn in pm.innings)
     assert len(pm.innings) > 2
 
