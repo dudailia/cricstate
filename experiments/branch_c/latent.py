@@ -102,16 +102,24 @@ def theta_path_kalman(signals: FloatArray, params: FilterParams) -> FloatArray:
     return out
 
 
-def causal_theta(df: pl.DataFrame, *, signal_col: str, kappa: float) -> FloatArray:
-    """theta_hat per row, accumulating per match in delivery order.
+def causal_theta(
+    df: pl.DataFrame,
+    *,
+    signal_col: str,
+    kappa: float,
+    group_cols: tuple[str, ...] = ("match_id",),
+) -> FloatArray:
+    """theta_hat per row, accumulating within each group in delivery order.
 
-    Requires columns: match_id, ORDER_COLS, signal_col. Returns an array
-    aligned to df's current row order (the frame is sorted internally, then
-    restored).
+    Requires columns: match_id, ORDER_COLS, signal_col, and group_cols. The
+    accumulation resets at each group boundary; group_cols=("match_id",) is the
+    full-match latent (carry-over across innings), ("match_id","innings_idx")
+    is the per-innings variant (no carry-over). Returns an array aligned to
+    df's current row order (the frame is sorted internally, then restored).
     """
     indexed = df.with_row_index("_row")
     ordered = indexed.sort(["match_id", *ORDER_COLS])
-    prior_sum = pl.col(signal_col).cum_sum().shift(1, fill_value=0.0).over("match_id")
-    n_prior = pl.int_range(0, pl.len()).over("match_id").cast(pl.Float64)
+    prior_sum = pl.col(signal_col).cum_sum().shift(1, fill_value=0.0).over(list(group_cols))
+    n_prior = pl.int_range(0, pl.len()).over(list(group_cols)).cast(pl.Float64)
     theta = ordered.with_columns((prior_sum / (n_prior + kappa)).alias("_theta")).sort("_row")
     return theta["_theta"].to_numpy().astype(np.float64)
