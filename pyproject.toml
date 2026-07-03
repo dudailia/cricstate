@@ -53,6 +53,7 @@ select = [
 "tests/*" = ["S101"]
 # report generators: sys.path bootstrap before imports; long table-row strings
 "scripts/*" = ["E402", "E501"]
+"experiments/*/run.py" = ["E402"]
 
 [tool.mypy]
 strict = true
