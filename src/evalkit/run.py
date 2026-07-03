@@ -299,6 +299,28 @@ def _fmt_ci(ci: CI) -> str:
     return f"{ci.point:.5f} [{ci.lo:.5f}, {ci.hi:.5f}]"
 
 
+# Frozen record of the Branch A gate experiment (docs/BRANCH_A_REPORT.md).
+# These numbers come from Branch A's own single test touch — folding them in
+# here re-renders that record; it does not re-evaluate the test split.
+_BRANCH_A_INCREMENT = [
+    "### Shipped increment — Branch A (M_shrunk = B3 + shrunk player effects)",
+    "",
+    "| model | test NLL [95% CI] | ΔNLL vs B3 [95% CI] | rel | bits/ball | tuned |",
+    "|---|---|---|---|---|---|",
+    "| M_shrunk | 1.60934 [1.60360, 1.61489] | -0.00504 [-0.00561, -0.00449] "
+    "| +0.31% | 0.00727 | λ=1600 (val) |",
+    "",
+    "Player identity (striker + bowler, train-only empirical-Bayes shrinkage)",
+    "measured under the frozen Branch A protocol: real signal (CI excludes 0),",
+    "economically negligible — verdict **AMBIGUOUS** at the band floor.",
+    "Per the frozen rule: the cheap increment ships; the hierarchical modeling",
+    "tower (Branches B/C) was **declined on evidence**. Canary PASS; dilution:",
+    "5.25% null-striker, 14.45% unseen striker, 19.15% unseen bowler.",
+    "Full protocol and per-class breakdown: docs/BRANCH_A_REPORT.md.",
+    "",
+]
+
+
 def render(report: dict[str, Any]) -> None:
     meta = report["_meta"]
     lines = [
@@ -373,6 +395,9 @@ def render(report: dict[str, Any]) -> None:
                 f"| {name} | " + " | ".join(f"{seasons[y]:.5f}" for y in sorted(seasons)) + " |"
             )
         lines.append("")
+        if cell_key == "t1/t20":
+            lines += _BRANCH_A_INCREMENT
+
         if cell_key.startswith("t2"):
             lines += ["### Calibration by bucket (test, shipped calibration)", ""]
             buckets0 = cell["models"]["B3_gbm"]["buckets"]

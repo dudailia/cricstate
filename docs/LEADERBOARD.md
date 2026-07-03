@@ -1,6 +1,6 @@
 # LEADERBOARD — cricstate M2 baselines (frozen release)
 
-corpus `v1.2` hash `c08e4eba45ff7a71…` · git `c584d62` · seed 1337 · bootstrap B=10000 (match-level, paired, seed 90210)
+corpus `v1.2` hash `c08e4eba45ff7a71…` · git `0dc5425` · seed 1337 · bootstrap B=10000 (match-level, paired, seed 90210)
 
 All numbers are POST-calibration (the shipped predictor): T1 temperature,
 T2 isotonic (t20) / Platt (odi thin cell, amendment #1), maps fit on val
@@ -38,6 +38,20 @@ Per-season test NLL (drift):
 | B1_table | 1.63902 | 1.65225 |
 | B2_logistic | 1.61847 | 1.63415 |
 | B3_gbm | 1.60392 | 1.62003 |
+
+### Shipped increment — Branch A (M_shrunk = B3 + shrunk player effects)
+
+| model | test NLL [95% CI] | ΔNLL vs B3 [95% CI] | rel | bits/ball | tuned |
+|---|---|---|---|---|---|
+| M_shrunk | 1.60934 [1.60360, 1.61489] | -0.00504 [-0.00561, -0.00449] | +0.31% | 0.00727 | λ=1600 (val) |
+
+Player identity (striker + bowler, train-only empirical-Bayes shrinkage)
+measured under the frozen Branch A protocol: real signal (CI excludes 0),
+economically negligible — verdict **AMBIGUOUS** at the band floor.
+Per the frozen rule: the cheap increment ships; the hierarchical modeling
+tower (Branches B/C) was **declined on evidence**. Canary PASS; dilution:
+5.25% null-striker, 14.45% unseen striker, 19.15% unseen bowler.
+Full protocol and per-class breakdown: docs/BRANCH_A_REPORT.md.
 
 ## t1/odi — test n = 136 matches / 72625 deliveries ⚠ THIN CELL
 
@@ -157,7 +171,7 @@ Alphabet order (frozen): 0, 1, 2, 3, 4, 6, other_runs, bye_legbye, no_ball, wide
 
 ```
 corpus_hash   c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781
-git_sha       c584d62
+git_sha       0dc5425
 seed          1337
 bootstrap     B=10000 seed=90210 (match-level, paired)
 val-only constants: B1 tau; B2 C; B3 early-stop iters; calibration maps

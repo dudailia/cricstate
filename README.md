@@ -34,6 +34,30 @@ n = 1,489 test matches / 343,287 deliveries. All numbers post-calibration
 skill score over the base rate** — and is the bar any future model must beat
 under the frozen rule.
 
+## The headline: we measured player identity — and declined to build the tower
+
+The obvious next step for any cricket model is player modeling: batter form,
+bowler matchups, a hierarchical tower of identity effects. Before building it,
+we **measured** it, under a pre-registered gate experiment with frozen verdict
+bands (`docs/BRANCH_A_REPORT.md`):
+
+- Train-only empirical-Bayes player effects (striker + bowler) on top of the
+  frozen B3 state model, λ tuned on val, single test touch, shuffled-identity
+  canary, match-level bootstrap.
+- **Result: player identity is worth +0.31% NLL — 0.007 bits per ball.**
+  Real (ΔNLL −0.00504 [−0.00561, −0.00449], CI excludes zero) but economically
+  negligible, and that's *with* honest dilution: 5% of balls have an unknown
+  incoming batter, 14–19% of test deliveries involve players unseen in train.
+- The unshrunk version (M_flat) is **0.158 nats worse than no identity at
+  all** — raw per-player tables destroy a good state model.
+- Frozen verdict: **AMBIGUOUS, at the band floor.** Per the pre-committed
+  rule: the cheap increment (M_shrunk) ships on the leaderboard; **Branches
+  B/C — the hierarchical modeling tower — were declined on the evidence.**
+
+Most projects build the tower because it's interesting. The measurement said
+no. That refusal — cheap, pre-committed, and documented — is what this
+repository is for.
+
 ### Where naive models die: the endgame
 
 Calibration by game phase (T20 win probability, test split, predicted vs
