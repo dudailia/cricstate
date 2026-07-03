@@ -1,68 +1,127 @@
-# cricstate — Module 1: State Core
+# cricstate
 
-## Data attribution & license
+**A calibrated, leakage-audited cricket win-probability benchmark** — built on
+16,754 professionally-parsed matches (4.7M deliveries) with a frozen,
+pre-committed decision rule that can *reject* a model.
 
-Ball-by-ball data comes from [Cricsheet](https://cricsheet.org), maintained by
-Stephen Rushe, and is licensed under the
-[Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
-Derived tables built from that data (everything under `data/v1/`) inherit the
-same CC BY-SA 4.0 terms: attribute Cricsheet and share adaptations alike.
-The pinned snapshot is recorded in `data/MANIFEST`.
+Most sports-prediction results are unfalsifiable: tuned on the data they report,
+scored without uncertainty, calibrated after the fact. cricstate is the
+opposite, by construction:
 
-Canonical cricket game-state representation and deterministic reconstruction from
-Cricsheet ball-by-ball data. Zero machine learning: a validated deterministic
-automaton. See [`docs/SPEC_M1.md`](docs/SPEC_M1.md) for the authoritative spec.
+- **Temporal splits, baked into the data** — train ends 2024-11-02, test starts
+  2025-08-30; split integrity is a red-build test, not a convention.
+- **Leakage canaries in CI** — a shuffled-target model must score exactly at
+  the base rate; a poisoned outcome column must be structurally unreachable by
+  the feature builder; the whole feature surface is a frozen whitelist.
+- **Match-level paired bootstrap** (B = 10,000) — ball-level resampling is
+  forbidden because within-match dependence makes it fake precision.
+- **A decision rule frozen before results existed** (SPEC_M2 §6): a challenger
+  beats the bar only with the 95% CI of ΔNLL excluding zero on *both* val and
+  test, ≥ 0.5% relative improvement, and no calibration regression — on a test
+  split evaluated **once**. Close results are "did not beat the bar."
 
-## Layout
+## Headline result — T20 win probability (test split, evaluated once)
+
+| model | test NLL [95% CI] | skill vs B0 |
+|---|---|---|
+| B0 — match base rate | 0.69275 [0.69195, 0.69356] | +0.000 |
+| B1 — bucketed table, monotone by construction | 0.54078 [0.52615, 0.55549] | +0.219 |
+| B2 — regularized logistic | 0.51189 [0.49689, 0.52679] | +0.261 |
+| **B3 — gradient-boosted trees** | **0.49036 [0.47547, 0.50519]** | **+0.292** |
+
+n = 1,489 test matches / 343,287 deliveries. All numbers post-calibration
+(isotonic, fit on validation only). **B3 reaches 0.490 test NLL — a +0.29
+skill score over the base rate** — and is the bar any future model must beat
+under the frozen rule.
+
+### Where naive models die: the endgame
+
+Calibration by game phase (T20 win probability, test split, predicted vs
+observed win rate for the team batting first):
+
+| bucket | n | B0 p̄ / observed | B3 p̄ / observed |
+|---|---|---|---|
+| chase, overs 17–20 | 19,190 | 0.508 / **0.659** | 0.674 / 0.659 |
+| last 30 balls | 72,781 | 0.508 / 0.564 | 0.571 / 0.564 |
+
+The constant-rate model predicts 0.508 when the true rate is 0.659 — a
+15-point miss exactly where matches are decided. The calibrated ladder closes
+it to ~1 point. Every leaderboard ships these bucket tables; the failure mode
+is measured, not assumed away.
+
+### The honest negative result
+
+On the ODI cell, **B3 did NOT beat B2**: ΔNLL test −0.006 with 95% CI
+[−0.019, **+0.008**] — the interval includes zero at n = 136 test matches, so
+the frozen rule says *did not beat the bar*, full stop. A thin cell producing
+wide intervals and a refused close call is the methodology working, not a
+caveat to bury: the same rule that certifies the T20 result rejects this one.
+
+## Reproducibility
+
+Everything is deterministic and fingerprinted:
 
 ```
-src/cricstate/        the package: schemas, parser, validator, δ, replay, build
-tests/                pytest + hypothesis suites
-tests/golden/         10 committed pathological Cricsheet matches (see spec §11)
-data/raw/             pinned Cricsheet snapshot (not in git; see data/MANIFEST)
-data/quarantine/      quarantine log from the corpus build (not in git)
-data/v1/              matches/deliveries/players parquet (not in git)
-docs/                 SPEC_M1.md, STATS.md
+corpus            16,754 matches / 4,748,382 deliveries (Cricsheet snapshot 2026-07-02, pinned by SHA256)
+corpus hash       c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781
+seed              1337 end-to-end (bootstrap seed 90210)
+test split        evaluated once — this release
 ```
 
-## Commands
+Two consecutive `uv run evalkit run-all` invocations produce **byte-identical**
+`docs/LEADERBOARD.md`. Golden schema files and pinned corpus/label hashes are
+red-build tests: the data contract cannot drift silently. Parsing is a
+deterministic automaton with quarantine-not-crash semantics — 100% of the
+22,211 snapshot files either parse clean (99.1% of in-scope T20/ODI) or land
+in a quarantine log with a closed-enum reason code.
 
 ```
-uv sync                       # install (Python 3.12, locked)
-uv run pytest -m "not corpus" # unit + property + golden tests (CI set)
-uv run pytest                 # everything, incl. corpus tests (needs snapshot)
-uv run ruff check . && uv run ruff format --check .
-uv run mypy
+uv sync                          # Python 3.12, locked deps
+uv run pytest -m "not corpus"    # unit + property tests (CI set)
 uv run python -m cricstate.download   # fetch + hash the Cricsheet snapshot
-uv run python -m cricstate.build      # full-corpus build → data/v1/ + docs/STATS.md
+uv run python -m cricstate.build      # rebuild the corpus (~7 min, hash-checked)
+uv run evalkit run-all           # regenerate the leaderboard (32s cached / ~18 min cold)
 ```
 
-## Module 3: how a challenger plugs in (SPEC_M2 §8, §12.8)
+## Plugging in a challenger (Module 3+)
 
-Implement the `Predictor` protocol (`evalkit.models.base`):
+Implement the `Predictor` protocol (`evalkit.models.base`), fit on train, tune
+on val only, and register per (task, format) cell:
 
 ```python
 class MyModel:
     name = "M3_mymodel"
     version = "1.0"
     def fit(self, train: pl.DataFrame, val: pl.DataFrame) -> None: ...
-    def predict_proba(self, df: pl.DataFrame) -> np.ndarray: ...  # [n,K] T1 / [n] T2
+    def predict_proba(self, df: pl.DataFrame) -> np.ndarray:  # [n,K] T1 / [n] T2
+        ...
 ```
 
-Frames are assembly frames (whitelisted `FEATURE_COLUMNS` + `fmt` + `y` +
-`match_id`); use `to_x`/`to_y`, never read `match_id`. Register per cell with
-`evalkit.models.base.register(task, fmt, model)`; artifacts cache under
-`artifacts/{task}/{fmt}/{name}/`. Evaluation is `uv run evalkit run-all`
-(cached) or `--cold` (full refit, < 60 min documented).
+Models see only the whitelisted within-match state features — no player
+identities, no venue identities, no odds. The bar to beat (T20 win
+probability): **0.490 test NLL**, under the frozen §6 rule above. The rule may
+not be renegotiated after results exist.
 
-**The frozen decision rule (SPEC_M2 §6 — may not be renegotiated):** a
-challenger beats the bar for a (task, fmt) cell iff, against the best
-baseline on that cell: (1) ΔNLL < 0 with the 95% match-level paired-bootstrap
-CI excluding 0 on **both** val and test; (2) relative NLL improvement ≥ 0.5%;
-(3) post-calibration ECE not worse by more than 0.005; (4) evaluated on the
-frozen test split, touched once. Close results are "did not beat the bar."
-The recorded M3 bar: **t2/t20 = 0.508 nats**; t2/odi = 0.512 is directional
-only (n = 143 test matches).
+## Data attribution & license
+
+Ball-by-ball data comes from [Cricsheet](https://cricsheet.org), maintained by
+Stephen Rushe, licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Derived
+tables built from that data inherit the same terms: attribute Cricsheet and
+share adaptations alike. The pinned snapshot is recorded in `data/MANIFEST`.
+
+## Repository map
+
+```
+src/cricstate/      Module 1 — deterministic state core: parser, validator,
+                    quarantine, transition function δ, replay, corpus build
+src/evalkit/        Module 2 — the measuring instrument: splits, features,
+                    metrics, calibration, bootstrap, baselines B0–B3, canaries
+tests/golden/       11 real pathological matches (super-over tie, D/L, penalty
+                    runs, retired hurt, miscounted over, …) — exact round-trips
+docs/               SPEC_M1, SPEC_M2 (+ gate-documented amendments),
+                    LEADERBOARD.md, STATS.md, evidence packs, reliability plots
+```
 
 ## Known macOS quirk
 
