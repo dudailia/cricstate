@@ -14,18 +14,32 @@ going to be published, and what it returned was "state saturates."
 
 ### How do I verify the pre-registration claim without trusting the authors?
 
-Git history is the receipt. The decision rule (SPEC_M2 §6: verdict bands,
-1% materiality, single test touch) entered the repository in commit
-`c584d62`, which precedes the leaderboard's one-time test evaluation
-(`08ed836`) and every experiment result (Branch A: `8c17726`…`0dc5425`;
-Branch C: `cf06cb2`…`5d8ec8e`). Run:
+Git history is the receipt — and it supports a precise claim, not a loose one.
+What was committed **before any test split was read** (P3, commit `c584d62`)
+is the *measurement apparatus and the discipline*: the full B0–B3 ladder and
+their val-only tuning, the metric contract, the calibration policy, the
+leakage canaries (including the ladder-inversion STOP rule at 0.005 NLL), the
+corpus/label hash pins, and the single-test-touch protocol itself — the P3
+report (`docs/P3_VAL_REPORT.md`) is explicitly validation-only, test
+untouched. The evaluation was built to be trusted before any test number
+existed. Check it:
 
 ```
-git log --oneline -- docs/SPEC_M2.md
+git show c584d62 --stat        # apparatus frozen, no test read yet
+git log --oneline --reverse    # then the single test touches
 ```
 
-and compare against the result commits. Amendments after gates are listed in
-SPEC_M2's changelog as dated amendments — additive, never edits to the rule.
+The **verdict thresholds** themselves were applied *in* the one-time test
+evaluations, not committed strictly before them: the challenger "beats-the-bar"
+gate (rel ≥ 0.5 %, CI < 0 on both splits, ΔECE ≤ 0.005) is in `run.py`, which
+entered at the P4 leaderboard release (`08ed836`) alongside the test read; the
+Branch A enrichment bands (1 % / 0.3 %) entered with the identity test touch
+(`0dc5425`), and the code says so outright: *"no separate Branch A spec file
+exists; the milestone prompt is the spec."* So the guarantee is **single,
+documented, canary-gated, byte-identical** test touches — not that the
+thresholds were hidden in git before the data was seen. `docs/SPEC_M2.md` §6
+states this timeline exactly; amendments after gates are additive and dated,
+never edits to a rule after a result.
 
 ### Isn't +0.31% with a CI excluding zero… a positive result?
 
