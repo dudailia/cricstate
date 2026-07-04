@@ -21,7 +21,7 @@ ever touched. Built on 16,754 professionally-parsed matches (4.7M deliveries).
 > **Match state is saturating.** It captures ~93% of the recoverable-above-marginal
 > signal. Player identity adds only **+0.31%** NLL (verdict *AMBIGUOUS*); a
 > causal per-match conditions latent adds **+0.024%** on validation
-> (*negligible*). The two obvious enrichments do not clear a pre-registered bar.
+> (*negligible*). The two obvious enrichments do not clear a fixed materiality bar.
 > The value of this repository is the honesty of that measurement, not a model
 > that wins. See the paper: [`report/paper.md`](report/paper.md).
 
@@ -59,10 +59,10 @@ opposite, by construction:
 > **One instrument, two tasks.** Every model is evaluated on two prediction
 > tasks: **T1 — per-ball outcome** (11-class; NLL ≈ 1.6 nats — the paper's
 > decomposition question) and **T2 — win probability** (binary; NLL ≈ 0.5 —
-> the leaderboard headline below). Two NLLs an order of magnitude apart are
+> the state-model leaderboard below). Two NLLs an order of magnitude apart are
 > the two tasks, not a discrepancy.
 
-## The paper: *how much signal is there beyond match state?* (T1)
+## The headline: match state captures almost all the recoverable signal (T1)
 
 The capstone is a pre-registered **negative result** —
 [`report/paper.md`](report/paper.md). On per-ball outcome prediction (T20), we
@@ -82,7 +82,7 @@ negligibility. The frozen evidence set is
 [`results/summary.json`](results/summary.json); regenerate all figures and
 tables with `uv run python scripts/generate_figures.py`.
 
-## Headline result — T20 win probability (T2, test split, evaluated once)
+## The state model — T20 win probability (T2, test split, evaluated once)
 
 | model | test NLL [95% CI] | skill vs B0 |
 |---|---|---|
@@ -96,12 +96,13 @@ n = 1,489 test matches / 343,287 deliveries. All numbers post-calibration
 skill score over the base rate** — and is the bar any future model must beat
 under the frozen rule.
 
-## The headline: we measured player identity — and declined to build the tower
+## Player identity: measured, then declined
 
 The obvious next step for any cricket model is player modeling: batter form,
 bowler matchups, a hierarchical tower of identity effects. Before building it,
-we **measured** it, under a pre-registered gate experiment with frozen verdict
-bands (`docs/BRANCH_A_REPORT.md`):
+we **measured** it, under a fixed-rule gate experiment — one documented,
+canary-gated test touch — with frozen verdict bands
+(`docs/BRANCH_A_REPORT.md`):
 
 - Train-only empirical-Bayes player effects (striker + bowler) on top of the
   frozen B3 state model, λ tuned on val, single test touch, shuffled-identity
