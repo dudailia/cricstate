@@ -121,9 +121,13 @@
 
   @media (max-width:640px){
     body{font-size:16px}
+    .wrap{padding:0 18px}
     .verdicts{grid-template-columns:1fr}
-    .seg.identity .lab,.seg.state .lab{white-space:normal}
-    .seg.identity{padding:0 8px}
+    .seg .lab{white-space:normal}
+    .barkey{gap:10px 18px}
+    table{font-size:13.5px}
+    th,td{padding:10px 6px}
+    td:first-child,th:first-child{white-space:normal}
   }
   @media (prefers-reduced-motion:no-preference){
     .seg{animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
