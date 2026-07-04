@@ -25,6 +25,14 @@ ever touched. Built on 16,754 professionally-parsed matches (4.7M deliveries).
 > The value of this repository is the honesty of that measurement, not a model
 > that wins. See the paper: [`report/paper.md`](report/paper.md).
 
+**Choose your depth** — **60 seconds:** the
+[project page](https://dudailia.github.io/cricstate/). **10 minutes:** the
+paper, [typeset](https://dudailia.github.io/cricstate/paper/) or as
+[markdown](report/paper.md). **Auditor mode:** [`docs/REPRODUCE.md`](docs/REPRODUCE.md)
+end-to-end, then the frozen decision rule in
+[`docs/SPEC_M2.md`](docs/SPEC_M2.md) §6 — committed to git before any result
+existed. The [docs index](docs/README.md) has a guided reading order.
+
 Most sports-prediction results are unfalsifiable: tuned on the data they report,
 scored without uncertainty, calibrated after the fact. cricstate is the
 opposite, by construction:
@@ -147,7 +155,7 @@ deterministic automaton with quarantine-not-crash semantics — 100% of the
 in a quarantine log with a closed-enum reason code.
 
 ```
-uv sync                          # Python 3.12, locked deps
+uv sync                          # Python 3.12, locked deps (macOS: see quirk note at the end)
 uv run pytest -m "not corpus"    # unit + property tests (CI set)
 uv run python -m cricstate.download   # fetch + hash the Cricsheet snapshot
 uv run python -m cricstate.build      # rebuild the corpus (~7 min, hash-checked)
