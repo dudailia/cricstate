@@ -1,0 +1,42 @@
+name: Bug report
+description: A reproducibility failure, broken command, or incorrect documentation.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Note: the corpus, harness, and reported numbers are **frozen**. A change
+        in a pinned hash is expected to fail CI, not a bug. Use this for broken
+        commands, environment issues, or documentation errors.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you run, and what went wrong?
+      placeholder: |
+        $ uv run pytest -m "not corpus"
+        ...error...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "macOS 14 · uv 0.5.x · Python 3.12"
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I ran `uv sync` and the failure reproduces from a clean checkout.
+          required: true
+        - label: This is not a frozen-hash mismatch caused by my own local changes.
+          required: true

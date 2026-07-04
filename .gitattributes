@@ -1,0 +1,12 @@
+# Normalize line endings; keep binary assets untouched.
+* text=auto eol=lf
+
+*.png binary
+*.parquet binary
+*.zip binary
+
+# Collapse generated/derived artifacts in diffs and language stats.
+docs/plots/**   linguist-generated=true
+report/figures/** linguist-generated=true
+uv.lock         linguist-generated=true
+*.ipynb         linguist-documentation=true

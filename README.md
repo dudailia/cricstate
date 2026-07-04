@@ -1,8 +1,29 @@
 # cricstate
 
-**A calibrated, leakage-audited cricket win-probability benchmark** — built on
-16,754 professionally-parsed matches (4.7M deliveries) with a frozen,
-pre-committed decision rule that can *reject* a model.
+[![CI](https://github.com/dudailia/cricstate/actions/workflows/ci.yml/badge.svg)](https://github.com/dudailia/cricstate/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![data: CC BY-SA 4.0](https://img.shields.io/badge/data-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](pyproject.toml)
+[![packaged with uv](https://img.shields.io/badge/packaging-uv-6340ac.svg)](https://github.com/astral-sh/uv)
+[![reproducible](https://img.shields.io/badge/results-byte--reproducible-2a9d8f.svg)](docs/REPRODUCE.md)
+
+**How much predictive signal is there in free ball-by-ball cricket data beyond
+match state?** A reproducible research repository that answers with a
+**pre-registered negative result** — a strong state model, two honest
+enrichment experiments, and a decision rule fixed before the test split was
+ever touched. Built on 16,754 professionally-parsed matches (4.7M deliveries).
+
+<p align="center">
+  <img src="report/figures/fig4_residual_decomposition.png" width="720"
+       alt="Information decomposition: match state extracts 92.8% of the recoverable signal; player identity 6.7% (test); conditions 0.5% (validation).">
+</p>
+
+> **Match state is saturating.** It captures ~93% of the recoverable-above-marginal
+> signal. Player identity adds only **+0.31%** NLL (verdict *AMBIGUOUS*); a
+> causal per-match conditions latent adds **+0.024%** on validation
+> (*negligible*). The two obvious enrichments do not clear a pre-registered bar.
+> The value of this repository is the honesty of that measurement, not a model
+> that wins. See the paper: [`report/paper.md`](report/paper.md).
 
 Most sports-prediction results are unfalsifiable: tuned on the data they report,
 scored without uncertainty, calibrated after the fact. cricstate is the
@@ -153,6 +174,36 @@ Stephen Rushe, licensed under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Derived
 tables built from that data inherit the same terms: attribute Cricsheet and
 share adaptations alike. The pinned snapshot is recorded in `data/MANIFEST`.
+
+## Architecture
+
+Two deterministic modules and two gate experiments feed one paper. Every arrow
+is reproducible; the corpus and label hashes are red-build tests.
+
+```mermaid
+flowchart LR
+  CS["Cricsheet snapshot<br/>(SHA-256 pinned)"] --> M1
+  subgraph M1["Module 1 · state core"]
+    P["parse + validate<br/>quarantine"] --> D["δ transition<br/>+ replay"] --> B["corpus build"]
+  end
+  M1 --> V1[("data/v1 parquet<br/>matches · deliveries · players<br/>hash c08e4eba…")]
+  V1 --> M2
+  subgraph M2["Module 2 · evaluation harness"]
+    SP["temporal splits"] --> FE["whitelisted features"] --> MOD["baselines B0–B3"]
+    MOD --> EV["NLL · Brier · ECE<br/>match-level bootstrap<br/>calibration · canaries"]
+  end
+  M2 --> LB[["LEADERBOARD.md<br/>frozen decision rule"]]
+  V1 --> EXP
+  M2 -. "reuses harness" .-> EXP
+  subgraph EXP["Gate experiments"]
+    A["Branch A · identity<br/>AMBIGUOUS +0.31%"]
+    C["Branch C · conditions<br/>partial · +0.024% val"]
+  end
+  LB --> PAPER[["report/paper.md<br/>figures · summary.json"]]
+  EXP --> PAPER
+```
+
+Full walkthrough: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Repository map
 

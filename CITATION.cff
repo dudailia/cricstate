@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: >-
+  cricstate: a calibrated, leakage-audited benchmark for predictive signal in
+  ball-by-ball cricket beyond match state
+message: >-
+  If you use this software, data derivation, or the reported results, please
+  cite it using these metadata.
+type: software
+authors:
+  - given-names: Ilia
+    family-names: Duda
+repository-code: "https://github.com/dudailia/cricstate"
+abstract: >-
+  A reproducible research repository measuring how much per-ball predictive
+  signal exists in free ball-by-ball cricket data beyond match state. It pairs
+  a deterministic state core (Module 1) with a frozen evaluation harness
+  (Module 2: temporal splits, proper scoring rules, match-level paired
+  bootstrap, calibration, leakage canaries, a pre-registered decision rule) and
+  two gate experiments. Headline negative result: match state is saturating —
+  player identity adds only +0.31% NLL (AMBIGUOUS) and a causal per-match
+  conditions latent adds +0.024% on validation (negligible).
+keywords:
+  - reproducible-research
+  - negative-results
+  - cricket
+  - sports-analytics
+  - probabilistic-forecasting
+  - calibration
+  - bootstrap
+  - benchmark
+license: MIT
+version: "1.2"
+date-released: "2026-07-04"

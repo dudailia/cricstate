@@ -1,0 +1,42 @@
+name: Module-3 challenger result
+description: Report a model evaluated under the frozen decision rule.
+labels: ["challenger"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        The decision rule (SPEC_M2 §6) is frozen and may not be renegotiated.
+        See CONTRIBUTING.md. Report results, not requests to change the bar.
+  - type: input
+    id: cell
+    attributes:
+      label: "(task, format) cell"
+      placeholder: "t1/t20  or  t2/t20"
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Result vs the best baseline
+      description: ΔNLL with 95% match-level paired-bootstrap CI on BOTH val and test; relative %; post-calibration ECE change.
+      placeholder: |
+        ΔNLL test -0.00504 [-0.00561, -0.00449] · val CI also < 0
+        relative 0.31% · ΔECE +0.001
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Verdict under the frozen rule
+      options: ["BEATS BAR", "AMBIGUOUS", "DID NOT BEAT THE BAR"]
+    validations:
+      required: true
+  - type: checkboxes
+    id: discipline
+    attributes:
+      label: Discipline
+      options:
+        - label: Tuned on validation only; the test split was evaluated once.
+          required: true
+        - label: Features are within-match state only (no identity/venue/odds) unless this is a scoped identity/conditions replication.
+          required: true
