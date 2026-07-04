@@ -107,6 +107,14 @@
   .chip{font-size:13.5px; color:#31362f; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:7px 14px}
   .chip b{font-family:var(--mono); color:var(--ink)}
 
+  /* ---- pipeline ---- */
+  .flow{display:flex; align-items:stretch; gap:10px; margin-top:6px}
+  .flow .node{flex:1 1 0; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:15px; line-height:1.3}
+  .flow .node b{font-size:14.5px; color:var(--ink)}
+  .flow .node span{display:block; font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-top:6px; word-break:break-word}
+  .flow .node.src{background:var(--pitch-soft); border-color:var(--pitch-mid)}
+  .flow .arrow{flex:0 0 auto; display:flex; align-items:center; color:var(--pitch-mid); font-size:17px}
+
   /* ---- repro / footer ---- */
   .repro{background:#11170f; color:#e9efe7; border-radius:12px; padding:30px 28px}
   .repro .eyebrow{color:#7fc79b}
@@ -125,6 +133,8 @@
     .verdicts{grid-template-columns:1fr}
     .seg .lab{white-space:normal}
     .barkey{gap:10px 18px}
+    .flow{flex-direction:column}
+    .flow .arrow{transform:rotate(90deg); align-self:center}
     table{font-size:13.5px}
     th,td{padding:10px 6px}
     td:first-child,th:first-child{white-space:normal}
@@ -224,6 +234,24 @@
       <span class="chip">calibration fit on <b>val</b> only</span>
       <span class="chip">decision rule <b>frozen</b> pre-results</span>
       <span class="chip">test split touched <b>once</b></span>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <span class="eyebrow">How it's built</span>
+    <h2 class="sec">One pipeline, one source of truth</h2>
+    <p class="sub">A deterministic state core feeds an evaluation harness; every figure, table, and
+    leaderboard number is regenerated from a single JSON — byte-identically.</p>
+    <div class="flow">
+      <div class="node"><b>Cricsheet JSON</b><span>ball-by-ball</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node"><b>Deterministic state core</b><span>δ transition · quarantine</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node"><b>evalkit harness</b><span>ladder · canaries · §6 rule</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node src"><b>summary.json</b><span>→ leaderboard · figures · paper</span></div>
     </div>
   </section>
 
