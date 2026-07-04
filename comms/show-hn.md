@@ -37,7 +37,7 @@ The setup, because sports ML is usually untrustworthy by construction:
 Results: a gradient-boosted state model captures ~93% of the recoverable
 signal. Shrunk empirical-Bayes player effects add 0.31% (real — the CI
 excludes zero — but below the pre-registered 1% bar; the unshrunk version is
-0.158 nats *worse* than no identity at all). A strictly causal per-match
+0.153 nats *worse* than no identity at all). A strictly causal per-match
 conditions latent added 0.024% on validation, so that arm was frozen without
 spending its one-time test evaluation.
 

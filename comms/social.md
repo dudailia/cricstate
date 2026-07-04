@@ -41,7 +41,7 @@ pre-registered 1% bar)
 frozen without touching test.
 
 **5/**
-The part I care about: the unshrunk per-player model is 0.158 nats WORSE
+The part I care about: the unshrunk per-player model is 0.153 nats WORSE
 than ignoring players entirely. Free ball-by-ball data cannot support player
 tables without heavy shrinkage — and with it, there's almost nothing left to
 win.

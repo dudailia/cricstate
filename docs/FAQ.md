@@ -56,7 +56,7 @@ The gate measured the *strong-prior, cheap* version deliberately: empirical-
 Bayes shrunk striker+bowler offsets on top of the frozen B3, λ tuned on
 validation only. Three facts bound the space:
 
-- The unshrunk version (M_flat) is **0.158 nats worse than no identity at
+- The unshrunk version (M_flat) is **0.153 nats worse than no identity at
   all** — free data cannot support per-player tables.
 - The shuffled-identity canary sits at the state baseline (+0.00095 nats) —
   the pipeline creates no phantom identity signal.

@@ -103,7 +103,7 @@ bands (`docs/BRANCH_A_REPORT.md`):
   Real (ΔNLL −0.00504 [−0.00561, −0.00449], CI excludes zero) but economically
   negligible, and that's *with* honest dilution: 5% of balls have an unknown
   incoming batter, 14–19% of test deliveries involve players unseen in train.
-- The unshrunk version (M_flat) is **0.158 nats worse than no identity at
+- The unshrunk version (M_flat) is **0.153 nats worse than no identity at
   all** — raw per-player tables destroy a good state model.
 - Frozen verdict: **AMBIGUOUS, at the band floor.** Per the pre-committed
   rule: the cheap increment (M_shrunk) ships on the leaderboard; **Branches

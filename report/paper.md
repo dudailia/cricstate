@@ -116,7 +116,7 @@ extracts **0.070 nats** below the marginal floor.
 identity model reaches test NLL **1.60934 [1.60360, 1.61489]**, a paired
 improvement over state of **−0.00504 [−0.00561, −0.00449]** nats — the CI
 excludes zero, so the effect is real, but it is only **0.31%** relative
-(**0.0073 bits/ball**): **AMBIGUOUS**. The unshrunk model is **0.158 nats
+(**0.0073 bits/ball**): **AMBIGUOUS**. The unshrunk model is **0.153 nats
 worse** than state (Figure 2) — raw per-player tables destroy a good state
 model — and the shuffled-identity canary sits at the baseline (+0.00095 nats,
 PASS). The gain is diluted by data limits: 5.25% of test balls have an unknown

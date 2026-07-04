@@ -60,7 +60,7 @@ was reported as AMBIGUOUS, not talked up into a win or down into a kill.
 Possibly — that's why the verdict is AMBIGUOUS rather than KILL, and the
 report says so. But the gate was designed to measure the *cheap* increment
 honestly: shrunk striker+bowler offsets with one tunable. The unshrunk
-version is 0.158 nats *worse* than no identity at all, and 14–19% of test
+version is 0.153 nats *worse* than no identity at all, and 14–19% of test
 deliveries involve unseen players — free data dilutes any identity signal.
 The pre-committed decision was: below 1%, don't build the tower. A
 hierarchical model would have to argue against that measurement, not against
