@@ -1,9 +1,10 @@
 """Publication figure primitives — style, validated palette, shared helpers.
 
-Palette is the dataviz reference categorical set, validated colorblind-safe
-(worst adjacent CVD ΔE 16.2 > 12). Aqua sits below 3:1 contrast, so every bar
-carries a direct value label (the relief rule). Figures are static print PNGs;
-no interaction layer applies.
+Palette matches the project's design language (pitch green / sage / amber on
+paper) and is validated categorical-safe: lightness band and chroma floor
+pass; worst adjacent CVD ΔE 19.6 > 12. Sage and amber sit below 3:1 contrast
+against the paper surface, so every mark carries a direct value label (the
+relief rule). Figures are static print PNGs; no interaction layer applies.
 """
 
 from pathlib import Path
@@ -14,18 +15,19 @@ import matplotlib as mpl
 mpl.use("Agg")
 import matplotlib.pyplot as plt
 
-# dataviz reference palette (light mode), assigned by role.
-INK = "#0b0b0b"
-MUTED = "#52514e"
-GRID = "#e7e6e2"
-SURFACE = "#fcfcfb"
-BLUE = "#2a78d6"  # improvement / primary series
-AQUA = "#1baf7a"  # second series
-RED = "#e34948"  # regression / overfit (status-adjacent, always labelled)
-ORANGE = "#eb6834"
+# project palette (light mode), assigned by role.
+INK = "#141814"
+MUTED = "#5d635b"
+GRID = "#e7eae2"
+LINE = "#d9ddd4"
+SURFACE = "#f6f7f4"
+PITCH = "#1e754a"  # primary series / state / improvement
+SAGE = "#57a87e"  # second series / identity increment
+AMBER = "#c98a3b"  # third series / conditions increment
+BALL = "#b23a2e"  # status: regression / overfit / decision bar (always labelled)
 GRAY = "#9a9992"  # reference / null
-# ordinal blue ramp (light->dark = worse->better), starts >= step 250 for 2:1
-BLUE_RAMP = ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab"]
+# ordinal pitch-green ramp (light->dark = worse->better), lightness-monotone
+GREEN_RAMP = ["#b7d4c3", "#83b598", "#4c9370", "#1e754a"]
 
 FIG_W, FIG_H, DPI = 7.4, 4.6, 200
 
@@ -38,15 +40,18 @@ def apply_style() -> None:
             "savefig.facecolor": SURFACE,
             "font.size": 11,
             "font.family": "DejaVu Sans",
-            "axes.edgecolor": MUTED,
-            "axes.labelcolor": INK,
+            "axes.edgecolor": LINE,
+            "axes.linewidth": 0.8,
+            "axes.labelcolor": MUTED,
             "text.color": INK,
             "xtick.color": MUTED,
             "ytick.color": MUTED,
             "axes.spines.top": False,
             "axes.spines.right": False,
-            "axes.titlesize": 12.5,
-            "axes.titleweight": "bold",
+            "axes.spines.left": False,
+            "axes.titlesize": 13,
+            "axes.titleweight": "normal",
+            "axes.labelsize": 10,
             "figure.dpi": DPI,
         }
     )
@@ -54,11 +59,11 @@ def apply_style() -> None:
 
 def new_axes(title: str, subtitle: str | None = None) -> tuple[Any, Any]:
     fig, ax = plt.subplots(figsize=(FIG_W, FIG_H))
-    ax.set_title(title, loc="left", pad=14 if subtitle else 8, color=INK)
+    ax.set_title(title, loc="left", pad=16 if subtitle else 8, color=INK)
     if subtitle:
         ax.text(
             0.0,
-            1.015,
+            1.018,
             subtitle,
             transform=ax.transAxes,
             fontsize=9.5,
@@ -68,6 +73,7 @@ def new_axes(title: str, subtitle: str | None = None) -> tuple[Any, Any]:
         )
     ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
     ax.set_axisbelow(True)
+    ax.tick_params(length=0)
     return fig, ax
 
 

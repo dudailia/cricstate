@@ -40,9 +40,9 @@ def fig_state_ladder(s: dict[str, Any]) -> None:
         "t20 · per-ball outcome NLL on the test split (lower is better) · 95% CI",
     )
     y = np.arange(len(names))[::-1]
-    ax.barh(y, vals, color=plots.BLUE_RAMP, height=0.62, zorder=3)
+    ax.barh(y, vals, color=plots.GREEN_RAMP, height=0.62, zorder=3)
     ax.errorbar(
-        vals, y, xerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.2, capsize=3, zorder=4
+        vals, y, xerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.0, capsize=3, zorder=4
     )
     for yi, n in zip(y, names, strict=True):
         hi = ladder[n]["ci"][1]
@@ -69,7 +69,7 @@ def fig_identity_delta(s: dict[str, Any]) -> None:
     m = s["identity_t1_t20_test"]["models"]
     order = ["M_flat", "M_shuffled", "M_shrunk", "M_state"]
     labels = ["M_flat\n(unshrunk)", "M_shuffled\n(canary)", "M_shrunk\n(identity)", "M_state\n(B3)"]
-    colors = [plots.RED, plots.GRAY, plots.BLUE, plots.MUTED]
+    colors = [plots.BALL, plots.GRAY, plots.PITCH, plots.MUTED]
     vals = [m[n]["nll"] for n in order]
     errs = np.array([_ci_err(m[n]["nll"], m[n]["ci"]) for n in order]).T
     fig, ax = plots.new_axes(
@@ -79,11 +79,10 @@ def fig_identity_delta(s: dict[str, Any]) -> None:
     x = np.arange(len(order))
     ax.bar(x, vals, color=colors, width=0.64, zorder=3)
     ax.errorbar(
-        x, vals, yerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.2, capsize=3, zorder=4
+        x, vals, yerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.0, capsize=3, zorder=4
     )
     state = m["M_state"]["nll"]
     ax.axhline(state, color=plots.MUTED, ls="--", lw=1.0, zorder=2)
-    ax.text(3.42, state, "  B3 state", va="center", ha="left", color=plots.MUTED, fontsize=8.5)
     for xi, v in zip(x, vals, strict=True):
         ax.text(xi, v + 0.004, f"{v:.3f}", va="bottom", ha="center", color=plots.INK, fontsize=9.5)
     ax.set_xticks(x)
@@ -104,7 +103,7 @@ def fig_identity_delta(s: dict[str, Any]) -> None:
         color=plots.INK,
         va="top",
         ha="right",
-        bbox={"boxstyle": "round,pad=0.4", "fc": "#f3f2ee", "ec": plots.GRID},
+        bbox={"boxstyle": "round,pad=0.4", "fc": plots.SURFACE, "ec": plots.LINE},
     )
     plots.footnote(fig, s["meta"])
     plots.save(fig, FIGDIR / "fig2_identity_delta.png")
@@ -123,7 +122,7 @@ def fig_conditions_val(s: dict[str, Any]) -> None:
     ax.plot(
         grid,
         curve,
-        color=plots.BLUE,
+        color=plots.PITCH,
         lw=2.0,
         marker="o",
         ms=6,
@@ -136,24 +135,15 @@ def fig_conditions_val(s: dict[str, Any]) -> None:
         [curve[best_i]],
         s=90,
         facecolor="white",
-        edgecolor=plots.BLUE,
+        edgecolor=plots.PITCH,
         lw=2,
         zorder=5,
     )
-    ax.annotate(
-        f"best κ = {c['best_kappa']:.0f}\n{curve[best_i]:.5f}",
-        (grid[best_i], curve[best_i]),
-        textcoords="offset points",
-        xytext=(-4, 14),
-        fontsize=8.6,
-        color=plots.BLUE,
-        ha="center",
-    )
     ax.axhline(c["M_state_nll"], color=plots.MUTED, ls="--", lw=1.2, zorder=2)
     ax.text(
-        grid[3],
+        grid[-1],
         c["M_state_nll"],
-        "M_state (B3) val NLL  ",
+        "M_state (B3) val NLL",
         va="bottom",
         ha="right",
         color=plots.MUTED,
@@ -168,14 +158,15 @@ def fig_conditions_val(s: dict[str, Any]) -> None:
     ax.text(
         0.02,
         0.05,
-        f"best val ΔNLL {c['dNLL_full_vs_state']:+.5f} = {c['relative_nll_pct']:.3f}% · "
-        f"{c['bits_per_ball']:.4f} bits/ball\ncarry-over vs per-innings: "
+        f"best κ = {c['best_kappa']:.0f} · val ΔNLL {c['dNLL_full_vs_state']:+.5f} = "
+        f"{c['relative_nll_pct']:.3f}% · {c['bits_per_ball']:.4f} bits/ball\n"
+        f"carry-over vs per-innings: "
         f"{c['carryover_effect_full_minus_innings']:+.5f} nats (negligible)",
         transform=ax.transAxes,
         fontsize=8.4,
         color=plots.INK,
         va="bottom",
-        bbox={"boxstyle": "round,pad=0.4", "fc": "#f3f2ee", "ec": plots.GRID},
+        bbox={"boxstyle": "round,pad=0.4", "fc": plots.SURFACE, "ec": plots.LINE},
     )
     plots.footnote(
         fig, s["meta"], extra="Conditions arm is partial (C1): validation evidence only."
@@ -187,9 +178,9 @@ def fig_residual_decomposition(s: dict[str, Any]) -> None:
     """Information decomposition: nats extracted above the marginal floor."""
     d = s["conclusion"]["information_decomposition_nats"]
     segs = [
-        ("state (B3)", d["captured_by_state_B3"], plots.BLUE, "test"),
-        ("+ identity", d["added_by_identity_test"], plots.AQUA, "test"),
-        ("+ conditions", d["added_by_conditions_val"], plots.ORANGE, "val"),
+        ("state (B3)", d["captured_by_state_B3"], plots.PITCH, "test"),
+        ("+ identity", d["added_by_identity_test"], plots.SAGE, "test"),
+        ("+ conditions", d["added_by_conditions_val"], plots.AMBER, "val"),
     ]
     fig, ax = plots.new_axes(
         "Information decomposition — state extracts almost all of it",
@@ -235,11 +226,11 @@ def fig_effect_sizes(s: dict[str, Any]) -> None:
     thresh_bits = 0.01 * state_nll / np.log(2)  # 1% relative NLL, in bits
     fig, ax = plots.new_axes(
         "Effect sizes are far below the decision bar",
-        "t20 · information gain over state, bits per ball · JUSTIFIES needs ≥ 1% relative NLL",
+        "t20 · information gain over state, bits per ball · pre-registered bar: ≥ 1% relative NLL",
     )
     names = ["identity\n(test)", "conditions\n(val)"]
     vals = [ident, cond]
-    colors = [plots.BLUE, plots.ORANGE]
+    colors = [plots.PITCH, plots.AMBER]
     x = np.arange(2)
     ax.bar(x, vals, color=colors, width=0.5, zorder=3)
     for xi, v in zip(x, vals, strict=True):
@@ -252,14 +243,14 @@ def fig_effect_sizes(s: dict[str, Any]) -> None:
             color=plots.INK,
             fontsize=10,
         )
-    ax.axhline(thresh_bits, color=plots.RED, ls="--", lw=1.4, zorder=2)
+    ax.axhline(thresh_bits, color=plots.BALL, ls="--", lw=1.4, zorder=2)
     ax.text(
         1.45,
         thresh_bits,
         f"  1% bar ≈ {thresh_bits:.4f} bits/ball",
         va="center",
         ha="left",
-        color=plots.RED,
+        color=plots.BALL,
         fontsize=8.8,
     )
     ax.set_xticks(x)
@@ -294,16 +285,16 @@ def fig_calibration(s: dict[str, Any]) -> None:
     ax.grid(axis="y", color=plots.GRID, linewidth=0.8, zorder=0)
     ax.grid(axis="x", visible=False)
     x = np.arange(len(labels))
-    w = 0.38
-    ax.bar(x - w / 2, state_v, w, color=plots.MUTED, label="B3 state", zorder=3)
-    ax.bar(x + w / 2, shrunk_v, w, color=plots.BLUE, label="+ identity", zorder=3)
-    for xi, v in zip(x - w / 2, state_v, strict=True):
+    w = 0.36  # slot 0.40 with a surface gap between paired bars
+    ax.bar(x - 0.20, state_v, w, color=plots.MUTED, label="B3 state", zorder=3)
+    ax.bar(x + 0.20, shrunk_v, w, color=plots.PITCH, label="+ identity", zorder=3)
+    for xi, v in zip(x - 0.20, state_v, strict=True):
         ax.text(
             xi, v + 0.0002, f"{v:.3f}", va="bottom", ha="center", fontsize=7.6, color=plots.MUTED
         )
-    for xi, v in zip(x + w / 2, shrunk_v, strict=True):
+    for xi, v in zip(x + 0.20, shrunk_v, strict=True):
         ax.text(
-            xi, v + 0.0002, f"{v:.3f}", va="bottom", ha="center", fontsize=7.6, color=plots.BLUE
+            xi, v + 0.0002, f"{v:.3f}", va="bottom", ha="center", fontsize=7.6, color=plots.PITCH
         )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
