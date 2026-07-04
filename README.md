@@ -39,9 +39,11 @@ opposite, by construction:
 
 - **Temporal splits, baked into the data** — train ends 2024-11-02, test starts
   2025-08-30; split integrity is a red-build test, not a convention.
-- **Leakage canaries in CI** — a shuffled-target model must score exactly at
-  the base rate; a poisoned outcome column must be structurally unreachable by
-  the feature builder; the whole feature surface is a frozen whitelist.
+- **Leakage canaries** — a model fit on shuffled labels/identities must
+  collapse to the baseline, and a poisoned outcome column must be structurally
+  unreachable by the feature builder. The structural and synthetic canaries run
+  in CI; the data-driven canaries over the pinned corpus run in the validation
+  report. The whole feature surface is a frozen whitelist.
 - **Match-level paired bootstrap** (B = 10,000) — ball-level resampling is
   forbidden because within-match dependence makes it fake precision.
 - **A decision rule frozen before results existed** (SPEC_M2 §6): a challenger
