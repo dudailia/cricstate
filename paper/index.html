@@ -152,7 +152,7 @@ two splits, strictly ordered date boundaries — is a build-failing test.</p>
 <h2><span class="no">3</span>Methods</h2>
 <p><b>Baseline ladder and the state model (B3).</b> We report a ladder from a marginal baseline
 (B0) through a bucketed table (B1) and regularized logistic model (B2) to a
-<b>gradient-boosted state model (B3)</b> — <code>HistGradientBoostingClassifier</code> on ~25
+<b>gradient-boosted state model (B3)</b> — <code>HistGradientBoostingClassifier</code> on 27
 whitelisted within-match state features, no identity, no latent variables. B3 is the strong
 baseline every enrichment must beat (Table&nbsp;1, Figure&nbsp;1).</p>
 <p><b>Identity model.</b> Per-player log-odds offsets for the on-strike batter and the bowler
@@ -207,7 +207,7 @@ identity model reaches test NLL <span class="num">1.60934 [1.60360, 1.61489]</sp
 improvement over state of <b class="num">−0.00504 [−0.00561, −0.00449]</b> nats — the CI
 excludes zero, so the effect is real, but it is only <b>0.31%</b> relative
 (<b>0.0073 bits/ball</b>): <span class="verdict">Ambiguous</span>. The unshrunk model is
-<b>0.158 nats worse</b> than state (Figure&nbsp;2) — raw per-player tables destroy a good state
+<b>0.153 nats worse</b> than state (Figure&nbsp;2) — raw per-player tables destroy a good state
 model — and the shuffled-identity canary sits at the baseline (+0.00095 nats, PASS). The gain
 is diluted by data limits: 5.25% of test balls have an unknown incoming batter (the observation
 gap) and 14–19% involve players unseen in training. Notably, identity <b>slightly worsens</b>
