@@ -1,0 +1,15 @@
+# Runtime + analysis (pip mirror of pyproject.toml; uv is the source of truth).
+# Reproduce exactly with:  uv sync    (uses the committed uv.lock)
+polars>=1.0
+pyarrow>=17.0
+numpy>=1.26
+scikit-learn>=1.5
+scipy>=1.13
+matplotlib>=3.9
+
+# Development / verification
+pytest>=8.0
+hypothesis>=6.100
+ruff>=0.6
+mypy>=1.11
+pre-commit>=3.8

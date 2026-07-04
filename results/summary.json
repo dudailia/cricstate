@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "title": "Predictive signal in ball-by-ball cricket beyond match state",
+    "task": "T1 per-ball outcome distribution, K=11 alphabet, t20 cell",
+    "corpus_tag": "v1.2",
+    "corpus_hash": "c08e4eba45ff7a71a51c4490cfe159a2ca34a7e5382bbc902041d147a11a6781",
+    "labels_hash": "e11bf9c83276d10871b401263c351d7e4d93da85183b3c1d141fefbdad20324f",
+    "seed": 1337,
+    "bootstrap": {"resamples": 10000, "unit": "match", "paired": true, "seed": 90210},
+    "n_matches": 16754,
+    "n_deliveries": 4748382,
+    "evidence_status": "FINAL — Branch C frozen at C1 (validation only); see conditions.status",
+    "source_reports": ["docs/LEADERBOARD.md", "docs/BRANCH_A_REPORT.md", "artifacts/branch_c/c1_kappa_curve.json"]
+  },
+
+  "splits": {
+    "policy": "80/10/10 temporal by match start_date, baked into corpus v1.2",
+    "train": {"matches": 13416, "deliveries": 3903506, "dates": "2002-06-27 -> 2024-11-02"},
+    "val":   {"matches": 1665,  "deliveries": 423685,  "dates": "2024-11-03 -> 2025-08-29"},
+    "test":  {"matches": 1673,  "deliveries": 421191,  "dates": "2025-08-30 -> 2026-06-28"},
+    "t1_t20_test": {"matches": 1493, "deliveries": 344278}
+  },
+
+  "alphabet": {
+    "order": ["0", "1", "2", "3", "4", "6", "other_runs", "bye_legbye", "no_ball", "wide", "wicket"],
+    "train_freq": {
+      "0": 0.387365, "1": 0.334838, "4": 0.091143, "2": 0.060011, "wicket": 0.043781,
+      "wide": 0.030395, "6": 0.028118, "bye_legbye": 0.015179, "3": 0.004704,
+      "no_ball": 0.004312, "other_runs": 0.000153
+    }
+  },
+
+  "state_ladder_t1_t20_test": {
+    "note": "post-calibration test NLL [95% match-level paired-bootstrap CI]; the state ladder from the M2 leaderboard",
+    "B0_marginal":  {"nll": 1.68462, "ci": [1.67895, 1.69028], "kind": "no-information baseline"},
+    "B1_table":     {"nll": 1.64761, "ci": [1.64166, 1.65349], "kind": "bucketed empirical table"},
+    "B2_logistic":  {"nll": 1.62865, "ci": [1.62292, 1.63427], "kind": "regularized logistic"},
+    "B3_gbm":       {"nll": 1.61438, "ci": [1.60858, 1.61995], "kind": "state model (the strong baseline)"}
+  },
+
+  "identity_t1_t20_test": {
+    "status": "COMPLETE (test evaluated once)",
+    "models": {
+      "M_state":    {"nll": 1.61438, "ci": [1.60858, 1.61995], "brier": 0.72782, "mean_ece": 0.00354},
+      "M_flat":     {"nll": 1.76775, "ci": [1.75993, 1.77592], "brier": 0.75520, "mean_ece": 0.02836, "note": "unshrunk MLE — overfits sparse players"},
+      "M_shrunk":   {"nll": 1.60934, "ci": [1.60360, 1.61489], "brier": 0.72686, "mean_ece": 0.00402, "note": "empirical-Bayes shrunk striker+bowler effects"},
+      "M_shuffled": {"nll": 1.61533, "ci": [1.60952, 1.62090], "note": "shuffled-identity leakage canary"}
+    },
+    "paired_deltas": {
+      "dNLL_shrunk_vs_state":  {"point": -0.00504, "ci": [-0.00561, -0.00449]},
+      "dNLL_flat_vs_shrunk":   {"point":  0.15841, "ci": [ 0.15233,  0.16461], "note": "shrinkage gap"},
+      "dNLL_shuffled_vs_state":{"point":  0.00095, "ci": [ 0.00082,  0.00108], "note": "canary"}
+    },
+    "effect_size": {"relative_nll_pct": 0.31, "bits_per_ball": 0.00727},
+    "dilution_pct": {"null_striker": 5.25, "unseen_striker": 14.45, "unseen_bowler": 19.15},
+    "per_class_ece": {
+      "0": {"state": 0.00969, "shrunk": 0.01312},
+      "1": {"state": 0.00734, "shrunk": 0.00740},
+      "2": {"state": 0.00318, "shrunk": 0.00259},
+      "3": {"state": 0.00133, "shrunk": 0.00138},
+      "4": {"state": 0.00333, "shrunk": 0.00549},
+      "6": {"state": 0.00272, "shrunk": 0.00375},
+      "other_runs": {"state": 0.00010, "shrunk": 0.00013},
+      "bye_legbye": {"state": 0.00260, "shrunk": 0.00210},
+      "no_ball": {"state": 0.00074, "shrunk": 0.00054},
+      "wide": {"state": 0.00628, "shrunk": 0.00572},
+      "wicket": {"state": 0.00165, "shrunk": 0.00196}
+    },
+    "tuned": {"lambda": 1600, "tuned_on": "val"},
+    "verdict": "AMBIGUOUS",
+    "verdict_bands": "JUSTIFIES >=1.0%; AMBIGUOUS [0.3%,1.0%); KILL <0.3% or CI includes 0"
+  },
+
+  "conditions_t1_t20": {
+    "status": "PARTIAL — Branch C frozen at C1 (VALIDATION ONLY; C2 canary and C3 single test touch NOT executed by decision; no downstream change expected)",
+    "signal": "B3-residual scoring valence; causal per-match latent (theta_hat uses only prior balls in the same match)",
+    "scope_caveat": "scoring-rate valence latent only; a null does not rule out non-scoring conditions structure (e.g. wicket-prone-but-not-low-scoring pitches)",
+    "constants": {"valence_mean_vbar": 1.19849, "valence_var_tau": 2.28536, "tunable": "kappa (prior strength); only tunable"},
+    "val": {
+      "M_state_nll": 1.6260430090679927,
+      "kappa_grid": [2.0, 5.0, 10.0, 25.0, 50.0, 100.0, 250.0, 600.0],
+      "val_nll_curve": [1.6322730578701814, 1.6305821645818508, 1.6292579028081713, 1.6276236949508338, 1.626636469944704, 1.625980346708814, 1.625651042235178, 1.6257083307587037],
+      "best_kappa": 250.0,
+      "unimodal": true,
+      "M_latent_full_nll": 1.625651042235178,
+      "M_latent_innings_nll": 1.6257571291174286,
+      "dNLL_full_vs_state": -0.00039,
+      "relative_nll_pct": 0.024,
+      "bits_per_ball": 0.00057,
+      "carryover_effect_full_minus_innings": -0.00011,
+      "carryover_note": "full-match vs per-innings latents differ by ~0.0001 nats on val -> cross-innings carry-over (pitch-persistence / team-leakage confound) is not materially active"
+    },
+    "test": null
+  },
+
+  "leakage_tests": {
+    "shuffled_identity": {"scope": "identity (Branch A, test)", "result": "PASS", "detail": "shuffled 1.61533 vs state 1.61438, delta +0.00095 within eps 0.01"},
+    "shuffled_target":   {"scope": "M2 P3, all cells", "result": "PASS", "detail": "retrained-on-shuffled-labels sits at B0 within eps 0.01"},
+    "poison_column":     {"scope": "feature builder", "result": "PASS", "detail": "structural whitelist select-first; poisoned outcome column unreachable"},
+    "temporal_split":    {"scope": "corpus v1.2", "result": "PASS", "detail": "no match in two splits; max(train)<min(val)<...<min(test)"},
+    "match_shuffle":     {"scope": "conditions (Branch C)", "result": "NOT RUN", "detail": "Branch C frozen at C1 by decision"}
+  },
+
+  "conclusion": {
+    "headline": "State-saturation: match-state model B3 captures essentially all recoverable per-ball predictive signal in free ball-by-ball data.",
+    "identity": "Player identity adds +0.31% NLL (0.007 bits/ball) on test — real but AMBIGUOUS at the band floor.",
+    "conditions": "A causally-filtered per-match scoring-conditions latent adds +0.024% NLL on validation (0.0006 bits/ball) — an order of magnitude below identity; frozen at C1 as negligible.",
+    "information_decomposition_nats": {
+      "no_information_floor_B0": 1.68462,
+      "captured_by_state_B3": 0.07024,
+      "added_by_identity_test": 0.00504,
+      "added_by_conditions_val": 0.00039
+    }
+  }
+}

@@ -20,6 +20,26 @@ opposite, by construction:
   test, ≥ 0.5% relative improvement, and no calibration regression — on a test
   split evaluated **once**. Close results are "did not beat the bar."
 
+## The paper: *how much signal is there beyond match state?*
+
+The capstone is a pre-registered **negative result** —
+[`report/paper.md`](report/paper.md). On per-ball outcome prediction (T20), we
+measure whether the two features practitioners reach for next add anything over
+a strong state model (B3):
+
+| enrichment | effect over state | in context | verdict |
+|---|---|---|---|
+| **player identity** | −0.00504 [−0.00561, −0.00449] test NLL · **+0.31%** · 0.007 bits/ball | CI excludes 0 but below the 1% bar | **AMBIGUOUS** |
+| **match conditions** (causal latent) | +0.024% · 0.0006 bits/ball, **validation only** | order of magnitude smaller | **partial (frozen at C1)** |
+
+State captures **~93%** of the recoverable-above-marginal signal; the two
+obvious enrichments buy almost nothing. Branch C (conditions) is marked
+**partial completion (C1 only, no downstream change expected)** — its one-time
+test evaluation was not spent, since the validation effect already establishes
+negligibility. The frozen evidence set is
+[`results/summary.json`](results/summary.json); regenerate all figures and
+tables with `uv run python scripts/generate_figures.py`.
+
 ## Headline result — T20 win probability (test split, evaluated once)
 
 | model | test NLL [95% CI] | skill vs B0 |
@@ -141,10 +161,17 @@ src/cricstate/      Module 1 — deterministic state core: parser, validator,
                     quarantine, transition function δ, replay, corpus build
 src/evalkit/        Module 2 — the measuring instrument: splits, features,
                     metrics, calibration, bootstrap, baselines B0–B3, canaries
+src/visualization/  publication figure + table builders (read the frozen
+                    evidence set only; run no models)
+experiments/        Branch A (player identity) + Branch C (conditions latent,
+                    partial — frozen at C1)
+report/             paper.md (the negative result) + figures/ + tables/
+results/            summary.json — the frozen, canonical evidence set
+scripts/            generate_figures.py, evidence generators, corpus/eval drivers
 tests/golden/       11 real pathological matches (super-over tie, D/L, penalty
                     runs, retired hurt, miscounted over, …) — exact round-trips
 docs/               SPEC_M1, SPEC_M2 (+ gate-documented amendments),
-                    LEADERBOARD.md, STATS.md, evidence packs, reliability plots
+                    LEADERBOARD.md, BRANCH_A_REPORT.md, STATS.md, evidence packs
 ```
 
 ## Known macOS quirk
