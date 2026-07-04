@@ -46,10 +46,15 @@ opposite, by construction:
   report. The whole feature surface is a frozen whitelist.
 - **Match-level paired bootstrap** (B = 10,000) — ball-level resampling is
   forbidden because within-match dependence makes it fake precision.
-- **A decision rule frozen before results existed** (SPEC_M2 §6): a challenger
-  beats the bar only with the 95% CI of ΔNLL excluding zero on *both* val and
-  test, ≥ 0.5% relative improvement, and no calibration regression — on a test
-  split evaluated **once**. Close results are "did not beat the bar."
+- **A pre-committed decision rule and a single test touch** (SPEC_M2 §6): two
+  gates, kept distinct. The *challenger ladder gate* — ΔNLL 95% CI excluding
+  zero on *both* val and test, ≥ 0.5% relative, no calibration regression. The
+  *enrichment verdict bands* — an increment (identity, conditions) justifies a
+  modelling tower only at ≥ 1% relative; 0.3–1% is *ambiguous*; below that,
+  killed. The measurement apparatus and the one-touch discipline were frozen
+  before the test split was read; each verdict is one documented, canary-gated
+  evaluation. Close results are "did not beat the bar" (see §6 for the exact,
+  git-checkable timeline).
 
 > **One instrument, two tasks.** Every model is evaluated on two prediction
 > tasks: **T1 — per-ball outcome** (11-class; NLL ≈ 1.6 nats — the paper's
@@ -66,7 +71,7 @@ a strong state model (B3):
 
 | enrichment | effect over state | in context | verdict |
 |---|---|---|---|
-| **player identity** | −0.00504 [−0.00561, −0.00449] test NLL · **+0.31%** · 0.007 bits/ball | CI excludes 0 but below the 1% bar | **AMBIGUOUS** |
+| **player identity** | −0.00504 [−0.00561, −0.00449] test NLL · **+0.31%** · 0.007 bits/ball | CI excludes 0 but below the 1% enrichment bar | **AMBIGUOUS** |
 | **match conditions** (causal latent) | +0.024% · 0.0006 bits/ball, **validation only** | order of magnitude smaller | **partial (frozen at C1)** |
 
 State captures **~93%** of the recoverable-above-marginal signal; the two
