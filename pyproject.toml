@@ -31,6 +31,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
+# The shipped library is cricstate (state core) + evalkit (harness). src/visualization
+# and scripts/ are repo-only report tooling — they bootstrap sys.path and read the
+# in-repo results/, so they are intentionally not part of the installable wheel.
 packages = ["src/cricstate", "src/evalkit"]
 
 [tool.ruff]
