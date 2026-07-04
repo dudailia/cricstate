@@ -41,7 +41,13 @@ opposite, by construction:
   test, ≥ 0.5% relative improvement, and no calibration regression — on a test
   split evaluated **once**. Close results are "did not beat the bar."
 
-## The paper: *how much signal is there beyond match state?*
+> **One instrument, two tasks.** Every model is evaluated on two prediction
+> tasks: **T1 — per-ball outcome** (11-class; NLL ≈ 1.6 nats — the paper's
+> decomposition question) and **T2 — win probability** (binary; NLL ≈ 0.5 —
+> the leaderboard headline below). Two NLLs an order of magnitude apart are
+> the two tasks, not a discrepancy.
+
+## The paper: *how much signal is there beyond match state?* (T1)
 
 The capstone is a pre-registered **negative result** —
 [`report/paper.md`](report/paper.md). On per-ball outcome prediction (T20), we
@@ -61,7 +67,7 @@ negligibility. The frozen evidence set is
 [`results/summary.json`](results/summary.json); regenerate all figures and
 tables with `uv run python scripts/generate_figures.py`.
 
-## Headline result — T20 win probability (test split, evaluated once)
+## Headline result — T20 win probability (T2, test split, evaluated once)
 
 | model | test NLL [95% CI] | skill vs B0 |
 |---|---|---|
