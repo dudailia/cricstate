@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preload" href="assets/fonts/ss4-600.woff2" as="font" type="font/woff2" crossorigin>
 <title>cricstate — predictive signal in cricket beyond match state</title>
 <meta name="description" content="A pre-registered negative result: match state saturates per-ball cricket prediction. Player identity adds +0.31% (AMBIGUOUS); a causal conditions latent adds +0.024% (negligible).">
 <link rel="canonical" href="https://dudailia.github.io/cricstate/">
@@ -20,12 +21,15 @@
 <meta name="twitter:description" content="A pre-registered negative result on 16,754 matches: match state captures ~93% of the recoverable signal beyond the marginal baseline.">
 <meta name="twitter:image" content="https://dudailia.github.io/cricstate/assets/social-preview.png">
 <style>
+  @font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/ss4-400.woff2) format("woff2")}
+  @font-face{font-family:"Source Serif 4";font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/ss4-600.woff2) format("woff2")}
+  @font-face{font-family:"Source Serif 4";font-style:italic;font-weight:400;font-display:swap;src:url(assets/fonts/ss4-italic.woff2) format("woff2")}
   :root{
     --paper:#f6f7f4; --panel:#fffffe; --ink:#141814; --muted:#5d635b;
     --line:#d9ddd4; --line-soft:#e7eae2;
     --pitch:#24663f; --pitch-mid:#6f9c85; --pitch-soft:#e4efe6;
     --amber:#c98a3b; --ball:#b23a2e;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --serif:"Source Serif 4","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
   }
