@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How much predictive signal is there in free ball-by-ball cricket data beyond match state?</title>
+<meta name="description" content="A pre-registered negative result: match state is saturating. Player identity adds +0.31% (AMBIGUOUS); a causal conditions latent adds +0.024% on validation (negligible).">
+<link rel="canonical" href="https://dudailia.github.io/cricstate/paper/">
+<meta name="theme-color" content="#24663f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="cricstate">
+<meta property="og:title" content="How much predictive signal is there in cricket beyond match state?">
+<meta property="og:description" content="A pre-registered negative result on 16,754 matches: state captures ~93% of the recoverable signal; the two obvious enrichments do not clear the bar.">
+<meta property="og:url" content="https://dudailia.github.io/cricstate/paper/">
+<meta property="og:image" content="https://dudailia.github.io/cricstate/assets/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{
+    --paper:#f6f7f4; --panel:#fffffe; --ink:#141814; --muted:#5d635b;
+    --line:#d9ddd4; --line-soft:#e7eae2;
+    --pitch:#24663f; --amber:#c98a3b;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--serif); font-size:17.5px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px}
+  a{color:var(--pitch); text-underline-offset:3px; text-decoration-thickness:1px}
+  a:hover{color:#184d2d}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--pitch); font-weight:600;
+  }
+  header{padding:64px 0 8px}
+  h1{font-size:clamp(28px,4.6vw,40px); line-height:1.16; margin:18px 0 14px;
+     font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+  .subtitle{font-family:var(--sans); font-size:17px; color:var(--muted); margin:0 0 10px}
+  .meta{font-family:var(--mono); font-size:12.5px; color:var(--muted); margin:14px 0 0}
+  .backlink{font-family:var(--sans); font-size:14px}
+  h2{font-size:24px; margin:52px 0 14px; font-weight:600; letter-spacing:-.01em}
+  h2 .no{color:var(--muted); font-weight:400; margin-right:10px; font-variant-numeric:tabular-nums}
+  p{margin:0 0 18px}
+  b,strong{font-weight:600}
+  .abstract{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:26px 28px 12px; margin:34px 0 8px;
+  }
+  .abstract .eyebrow{display:block; margin-bottom:12px}
+  .abstract p{font-size:16px; line-height:1.68}
+  ul{margin:0 0 18px; padding-left:22px}
+  li{margin-bottom:8px}
+  .num,code{font-family:var(--mono); font-variant-numeric:tabular-nums}
+  code{font-size:.86em; background:var(--panel); border:1px solid var(--line-soft);
+       border-radius:4px; padding:1px 5px; white-space:nowrap}
+  table{width:100%; border-collapse:collapse; font-family:var(--sans); font-size:14.5px;
+        margin:6px 0 10px}
+  th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line-soft); vertical-align:top}
+  thead th{font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted);
+           font-weight:600; border-bottom:1px solid var(--line)}
+  td.n,th.n{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:13.5px}
+  .tablewrap{overflow-x:auto}
+  .caption{font-family:var(--sans); font-size:13.5px; color:var(--muted);
+           margin:8px 0 34px; line-height:1.55}
+  .caption b{color:var(--ink)}
+  figure{margin:34px 0 0}
+  figure img{width:100%; height:auto; border:1px solid var(--line); border-radius:8px; display:block}
+  figure figcaption{font-family:var(--sans); font-size:13.5px; color:var(--muted);
+                    margin:10px 0 34px; line-height:1.55}
+  figure figcaption b{color:var(--ink)}
+  .verdict{font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+           padding:2px 8px; border-radius:999px; border:1px solid #ecd8bd; background:#f7ede0;
+           color:#8a5a1a; white-space:nowrap}
+  footer{padding:56px 0 64px; color:var(--muted); font-family:var(--sans); font-size:14px;
+         border-top:1px solid var(--line); margin-top:60px}
+  @media print{
+    body{background:#fff; font-size:11.5pt}
+    .wrap{max-width:100%; padding:0}
+    header{padding-top:0}
+    .backlink,.toplinks{display:none}
+    figure,table,.abstract{break-inside:avoid}
+    h2{break-after:avoid}
+    a{color:var(--ink); text-decoration:none}
+    @page{margin:22mm 20mm}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="backlink"><a href="../">← cricstate</a></p>
+  <span class="eyebrow">Pre-registered negative result</span>
+  <h1>How much predictive signal is there in free ball-by-ball cricket data beyond match state?</h1>
+  <p class="subtitle">A strong state model, two honest enrichment experiments, and a decision
+  rule fixed before the test split was ever touched.</p>
+  <p class="meta">cricstate project · corpus v1.2 · all evaluation seeded (1337) and hash-pinned ·
+  <a href="https://github.com/dudailia/cricstate/blob/main/report/paper.md">source markdown</a></p>
+</header>
+
+<div class="abstract">
+  <span class="eyebrow">Abstract</span>
+  <p>We ask a single, falsifiable question: once a strong model conditions on within-match
+  <b>state</b> (score, wickets, balls, run-rate, phase), how much <i>additional</i> predictive
+  signal remains in the two features practitioners reach for next — <b>player identity</b> and
+  <b>match-level latent conditions</b> — using only freely available ball-by-ball data? We
+  evaluate per-ball outcome prediction over a frozen 11-class alphabet on 16,754 men's and
+  women's T20/ODI matches (4.75M deliveries), with an 80/10/10 temporal split, negative
+  log-likelihood (NLL) as the primary metric, and 95% confidence intervals from a
+  <b>match-level paired bootstrap</b> (10,000 resamples). Against a gradient-boosted state model
+  (B3, test NLL <span class="num">1.614</span> nats), a strongly shrunk player-identity model
+  improves test NLL by <b>0.31% (0.0073 bits/ball)</b> — statistically distinguishable from zero
+  but below our pre-registered 1% materiality bar (verdict: <b>AMBIGUOUS</b>). A
+  causally-filtered per-match "conditions" latent improves <i>validation</i> NLL by
+  <b>0.024% (0.0006 bits/ball)</b>, an order of magnitude smaller; on that evidence the arm was
+  frozen before its one-time test evaluation. Leakage canaries (shuffled identity, shuffled
+  targets, poisoned features, temporal-split integrity) all pass. We conclude that within-match
+  <b>state is saturating</b>: it captures ~93% of the recoverable-above-marginal signal, and the
+  two obvious enrichments buy almost nothing. We publish this as a negative result, with the
+  decision rule fixed before the test split was touched.</p>
+</div>
+
+<h2><span class="no">1</span>Introduction</h2>
+<p>Sports-modelling results are easy to report and hard to trust: models tuned on the data they
+are scored on, point estimates without uncertainty, calibration asserted after the fact. This
+paper is built the other way around. We fix one hypothesis, one primary metric, one uncertainty
+procedure, and a decision rule <b>before</b> looking at the test split, then report whatever the
+rule returns — including "not worth it."</p>
+<p>The substantive question is whether free ball-by-ball data contains exploitable structure
+beyond match state. Two candidate sources dominate practitioner intuition: <b>who</b> is
+involved (batter/bowler skill) and <b>where/under what conditions</b> the match is played
+(pitch, weather, a "high-scoring day"). We measure each as an increment over a strong state
+baseline, and we make the measurement adversarial to ourselves with explicit leakage
+canaries.</p>
+
+<h2><span class="no">2</span>Data</h2>
+<p>Ball-by-ball data is from <a href="https://cricsheet.org">Cricsheet</a> (CC BY-SA 4.0),
+pinned by SHA-256 as corpus <b>v1.2</b>. A deterministic state machine parses each match into
+per-delivery rows; 100% of the 22,211 snapshot files either parse cleanly (99.1% of in-scope
+T20/ODI) or land in a quarantine log with a closed-enum reason code. The prediction target is
+the next delivery's outcome over a frozen <b>K&nbsp;=&nbsp;11</b> alphabet (dot, 1, 2, 3, 4, 6,
+other-runs, bye/leg-bye, no-ball, wide, wicket). This paper studies the <b>T20</b> cell.</p>
+<p>Splits are 80/10/10 <b>temporal</b> by match start date (train ends 2024-11-02; test is
+2025-08-30 onward), baked into the corpus so they cannot drift. Split integrity — no match in
+two splits, strictly ordered date boundaries — is a build-failing test.</p>
+
+<h2><span class="no">3</span>Methods</h2>
+<p><b>Baseline ladder and the state model (B3).</b> We report a ladder from a marginal baseline
+(B0) through a bucketed table (B1) and regularized logistic model (B2) to a
+<b>gradient-boosted state model (B3)</b> — <code>HistGradientBoostingClassifier</code> on ~25
+whitelisted within-match state features, no identity, no latent variables. B3 is the strong
+baseline every enrichment must beat (Table&nbsp;1, Figure&nbsp;1).</p>
+<p><b>Identity model.</b> Per-player log-odds offsets for the on-strike batter and the bowler
+over the 11 classes, estimated by <b>empirical-Bayes (Dirichlet) shrinkage</b> toward the
+population marginal, and added to B3's logits. The prior strength (λ) is the only tunable,
+chosen on validation; unseen players receive the population mean (a zero offset). We also fit
+an <b>unshrunk</b> variant (M_flat) to quantify the cost of not regularizing, and a
+<b>shuffled-identity</b> model as a leakage canary.</p>
+<p><b>Conditions model (causal latent).</b> A scalar per-match "conditions" latent θ, estimated
+by a conjugate Gaussian filter that is <b>strictly causal</b>: the estimate for ball <i>t</i>
+uses only the outcomes of balls <i>before</i> t in the same match. The signal is the
+<b>B3 residual</b> — observed scoring valence minus B3's expected valence — so the latent can
+only explain scoring that state does <i>not</i> already capture. θ enters as a gain-free
+exponential tilt of B3's distribution; the prior strength κ is the only tunable, chosen on
+validation. A structural unit test proves causality: permuting balls at or after <i>t</i>
+leaves the prediction for <i>t</i> unchanged.</p>
+<p><b>Evaluation.</b> Primary metric is test <b>NLL</b> (nats). Uncertainty is a
+<b>match-level paired bootstrap</b> (resample <i>matches</i>, not balls — within-match
+dependence makes ball-level resampling fake precision), 10,000 resamples, fixed seed, 95%
+percentile CIs on metrics and on paired deltas. We also report multiclass Brier and per-class
+expected calibration error (ECE, 20 equal-mass bins). Calibration maps (temperature) are fit
+on validation only.</p>
+<p><b>Pre-registered decision rule.</b> An enrichment <b>JUSTIFIES</b> further work iff its
+paired ΔNLL 95% CI excludes 0 <b>and</b> relative improvement ≥ 1.0%; <b>AMBIGUOUS</b> if the
+CI excludes 0 but improvement is in [0.3%, 1.0%); <b>KILL</b> otherwise. The rule was fixed
+before the test split was evaluated and is not renegotiated afterwards.</p>
+<p><b>Leakage canaries (all must pass).</b> Shuffled-identity (identities randomly reassigned →
+must collapse to the state baseline within 0.01 nats), shuffled-target (retrain on permuted
+labels → must sit at the marginal), poisoned-column (an injected outcome feature must be
+structurally unreachable), and temporal-split integrity.</p>
+
+<h2><span class="no">4</span>Results</h2>
+<p><b>State captures the signal (Figure&nbsp;1, Table&nbsp;1).</b> The ladder is strictly
+ordered on test: B0 <span class="num">1.685</span> → B1 <span class="num">1.648</span> → B2
+<span class="num">1.629</span> → <b class="num">B3 1.614</b> nats. State extracts
+<b>0.070 nats</b> below the marginal floor.</p>
+
+<div class="tablewrap"><table>
+  <thead><tr><th>model</th><th>kind</th><th class="n">test NLL [95% CI]</th></tr></thead>
+  <tbody>
+    <tr><td>B0_marginal</td><td>no-information baseline</td><td class="n">1.68462 [1.67895, 1.69028]</td></tr>
+    <tr><td>B1_table</td><td>bucketed empirical table</td><td class="n">1.64761 [1.64166, 1.65349]</td></tr>
+    <tr><td>B2_logistic</td><td>regularized logistic</td><td class="n">1.62865 [1.62292, 1.63427]</td></tr>
+    <tr><td>B3_gbm</td><td>state model (the strong baseline)</td><td class="n">1.61438 [1.60858, 1.61995]</td></tr>
+  </tbody>
+</table></div>
+<p class="caption"><b>Table 1.</b> The state ladder, t20 test split, per-ball outcome NLL
+(lower is better), 95% match-level paired-bootstrap CIs.</p>
+
+<p><b>Player identity: real but immaterial (Figure&nbsp;2, Table&nbsp;2).</b> The shrunk
+identity model reaches test NLL <span class="num">1.60934 [1.60360, 1.61489]</span>, a paired
+improvement over state of <b class="num">−0.00504 [−0.00561, −0.00449]</b> nats — the CI
+excludes zero, so the effect is real, but it is only <b>0.31%</b> relative
+(<b>0.0073 bits/ball</b>): <span class="verdict">Ambiguous</span>. The unshrunk model is
+<b>0.158 nats worse</b> than state (Figure&nbsp;2) — raw per-player tables destroy a good state
+model — and the shuffled-identity canary sits at the baseline (+0.00095 nats, PASS). The gain
+is diluted by data limits: 5.25% of test balls have an unknown incoming batter (the observation
+gap) and 14–19% involve players unseen in training. Notably, identity <b>slightly worsens</b>
+per-class calibration for dot (0.010→0.013) and boundary (0.003→0.005) balls
+(Figure&nbsp;6): the small NLL gain is not a free calibration win.</p>
+
+<div class="tablewrap"><table>
+  <thead><tr><th>model</th><th class="n">test NLL [95% CI]</th><th>note</th></tr></thead>
+  <tbody>
+    <tr><td>M_state</td><td class="n">1.61438 [1.60858, 1.61995]</td><td></td></tr>
+    <tr><td>M_shrunk</td><td class="n">1.60934 [1.60360, 1.61489]</td><td>empirical-Bayes shrunk striker+bowler effects</td></tr>
+    <tr><td>M_flat</td><td class="n">1.76775 [1.75993, 1.77592]</td><td>unshrunk MLE — overfits sparse players</td></tr>
+    <tr><td>M_shuffled</td><td class="n">1.61533 [1.60952, 1.62090]</td><td>shuffled-identity leakage canary</td></tr>
+  </tbody>
+</table></div>
+<p class="caption"><b>Table 2.</b> Identity arm. Primary ΔNLL (shrunk minus state):
+<b class="num">−0.00504 [−0.00561, −0.00449]</b> = 0.31% relative, 0.0073 bits/ball. Verdict:
+<b>AMBIGUOUS</b>. Dilution: null-striker 5.25%, unseen striker 14.45%, unseen bowler 19.15%.</p>
+
+<p><b>Match conditions: negligible on validation (Figure&nbsp;3, Table&nbsp;3).</b> The causal
+latent's validation NLL curve is unimodal with an interior optimum at κ&nbsp;=&nbsp;250, where
+it improves validation NLL by <b class="num">−0.00039 nats = 0.024% (0.0006 bits/ball)</b> — an
+order of magnitude below the identity effect. A per-innings variant (no cross-innings
+carry-over) differs from the full-match latent by only ~0.0001 nats, so the
+pitch-persistence/team-quality confound is not materially active. <b>On this evidence the
+conditions arm was frozen at its validation stage (C1); its one-time test evaluation was not
+run.</b> We therefore make no test-set claim for conditions.</p>
+
+<div class="tablewrap"><table>
+  <thead><tr><th>quantity</th><th class="n">value</th></tr></thead>
+  <tbody>
+    <tr><td>M_state val NLL</td><td class="n">1.62604</td></tr>
+    <tr><td>M_latent (full match) val NLL</td><td class="n">1.62565</td></tr>
+    <tr><td>M_latent (per-innings) val NLL</td><td class="n">1.62576</td></tr>
+    <tr><td>best κ (val)</td><td class="n">250</td></tr>
+    <tr><td>val ΔNLL vs state</td><td class="n">−0.00039 (0.024%)</td></tr>
+    <tr><td>bits/ball (val)</td><td class="n">0.0006</td></tr>
+    <tr><td>carry-over (full minus per-innings)</td><td class="n">−0.00011 nats</td></tr>
+  </tbody>
+</table></div>
+<p class="caption"><b>Table 3.</b> Conditions arm — <b>partial</b>, Branch C frozen at C1
+(validation only; C2 canary and C3 single test touch not executed, by decision). Scope:
+scoring-rate valence latent only; a null does not rule out non-scoring conditions structure
+(e.g. wicket-prone-but-not-low-scoring pitches).</p>
+
+<p><b>Information decomposition (Figure&nbsp;4).</b> Of the signal recoverable above the
+marginal floor, state accounts for <b>92.8%</b>, identity for 6.7% (test), and conditions for
+0.5% (validation). Both enrichments are near-invisible slivers.</p>
+<p><b>Effect sizes vs the bar (Figure&nbsp;5).</b> Both increments sit far below the 1%
+materiality threshold (≈ 0.023 bits/ball): identity at 0.0073, conditions at 0.0006
+bits/ball.</p>
+<p><b>Leakage canaries (Table&nbsp;4).</b> Shuffled-identity, shuffled-target, poisoned-column,
+and temporal-split integrity all <b>PASS</b>. The match-shuffle canary for the conditions arm
+was not run (arm frozen at C1).</p>
+
+<div class="tablewrap"><table>
+  <thead><tr><th>test</th><th>scope</th><th>result</th></tr></thead>
+  <tbody>
+    <tr><td>shuffled_identity</td><td>identity (Branch A, test)</td><td><b>PASS</b></td></tr>
+    <tr><td>shuffled_target</td><td>M2 P3, all cells</td><td><b>PASS</b></td></tr>
+    <tr><td>poison_column</td><td>feature builder</td><td><b>PASS</b></td></tr>
+    <tr><td>temporal_split</td><td>corpus v1.2</td><td><b>PASS</b></td></tr>
+    <tr><td>match_shuffle</td><td>conditions (Branch C)</td><td><b>NOT RUN</b> (arm frozen at C1)</td></tr>
+  </tbody>
+</table></div>
+<p class="caption"><b>Table 4.</b> Leakage canaries.</p>
+
+<h2><span class="no">5</span>Discussion</h2>
+<p><b>State saturation.</b> The consistent finding across both arms is that a gradient-boosted
+model of within-match state already captures nearly all the per-ball predictive structure that
+free ball-by-ball data exposes. Identity adds a real but sub-materiality 0.31%; a causal
+conditions latent adds an order of magnitude less. The practitioner's two obvious next features
+do not, on this data, clear a pre-registered bar.</p>
+<p><b>Scope of the conditions null.</b> By construction the conditions latent is a
+<b>scoring-valence</b> signal (runs-weighted). A null therefore rules out a per-match
+<i>scoring-rate</i> conditions factor beyond state — not conditions in general. A pitch that is
+wicket-prone without being low-scoring is invisible to a runs-weighted latent; that hypothesis
+remains open.</p>
+<p><b>Why we froze Branch C.</b> The validation effect (0.024%) is an order of magnitude below
+an already-AMBIGUOUS identity effect and far below the KILL threshold. Spending the one-time
+test evaluation was not warranted; freezing at validation is the honest,
+discipline-preserving choice and is marked as <b>partial completion</b>.</p>
+<p><b>Honesty over performance.</b> Every number here is directly comparable to a frozen
+leaderboard because the same harness (splits, metrics, bootstrap, B3) produced all of them. The
+unshrunk identity result and the identity-calibration regression are reported precisely because
+they cut against a "player modelling helps" narrative.</p>
+
+<h2><span class="no">6</span>Limitations</h2>
+<ul>
+  <li><b>One format, one task.</b> T20, per-ball outcome only; ODI and win-probability are out
+  of scope here.</li>
+  <li><b>Conditions arm is validation-only</b> (partial): no test-set claim.</li>
+  <li><b>Scoring-valence latent</b> cannot see non-scoring conditions structure.</li>
+  <li><b>Free data only:</b> no player biometrics, no ball-tracking, no venue/weather
+  covariates — by design; the question is what <i>free ball-by-ball</i> data yields.</li>
+  <li><b>Data dilution</b> (observation gap, unseen players) attenuates the identity estimate;
+  the reported effect is a lower bound in that sense.</li>
+</ul>
+
+<h2><span class="no">7</span>Conclusion</h2>
+<p>Within-match state is a saturating predictor of the next ball in free ball-by-ball cricket
+data. Player identity contributes a real but immaterial 0.31% (AMBIGUOUS under a
+pre-registered rule); a causal per-match scoring conditions latent contributes a negligible
+0.024% on validation and was frozen before its test evaluation. The scientific content of this
+repository is not a model that wins — it is a measurement, made adversarial to itself and
+pre-committed, that says the obvious enrichments are not worth building.</p>
+
+<h2><span class="no">8</span>Reproducibility</h2>
+<ul>
+  <li>Corpus <b>v1.2</b>, SHA-256 <code>c08e4eba…a11a6781</code>; labels
+  <code>e11bf9c8…20324f</code>.</li>
+  <li>Seed <b>1337</b> end-to-end; bootstrap seed 90210, 10,000 match-level resamples.</li>
+  <li>Test split evaluated once (identity); conditions test not evaluated (frozen).</li>
+  <li>Evidence set:
+  <a href="https://github.com/dudailia/cricstate/blob/main/results/summary.json"><code>results/summary.json</code></a>.
+  Figures: <a href="https://github.com/dudailia/cricstate/tree/main/report/figures"><code>report/figures/</code></a>.
+  Tables: <a href="https://github.com/dudailia/cricstate/tree/main/report/tables"><code>report/tables/</code></a>.</li>
+  <li>Regenerate figures/tables from the frozen evidence:
+  <code>uv run python scripts/generate_figures.py</code>.</li>
+  <li>Full leaderboard and branch reports:
+  <a href="https://github.com/dudailia/cricstate/blob/main/docs/LEADERBOARD.md"><code>docs/LEADERBOARD.md</code></a>,
+  <a href="https://github.com/dudailia/cricstate/blob/main/docs/BRANCH_A_REPORT.md"><code>docs/BRANCH_A_REPORT.md</code></a>,
+  <code>artifacts/branch_c/c1_kappa_curve.json</code>.</li>
+</ul>
+
+<h2>Figures</h2>
+
+<figure>
+  <img src="../report/figures/fig1_state_ladder.png" alt="Bar chart: the B0 to B3 state ladder on t20 test NLL. B0 1.685, B1 1.648, B2 1.629, B3 1.614 nats.">
+  <figcaption><b>Figure 1.</b> The B0→B3 state ladder (t20 test NLL). State extracts the
+  signal.</figcaption>
+</figure>
+<figure>
+  <img src="../report/figures/fig2_identity_delta.png" alt="Bar chart: identity models vs state. M_flat 1.768 overfits; M_shuffled 1.615 sits at the baseline; M_shrunk 1.609 barely beats M_state 1.614.">
+  <figcaption><b>Figure 2.</b> Player identity vs state. Shrunk identity barely beats state
+  (0.31%, AMBIGUOUS); the unshrunk model overfits; the shuffled canary sits at the
+  baseline.</figcaption>
+</figure>
+<figure>
+  <img src="../report/figures/fig3_conditions_val.png" alt="Line chart: validation NLL vs prior strength kappa. Unimodal curve with interior optimum at kappa 250, just below the state baseline.">
+  <figcaption><b>Figure 3.</b> The conditions latent's validation κ curve (unimodal, interior
+  optimum). Validation only — Branch C is frozen at C1.</figcaption>
+</figure>
+<figure>
+  <img src="../report/figures/fig4_residual_decomposition.png" alt="Bar chart: information decomposition. State 92.8%, identity 6.7% (test), conditions 0.5% (validation) of signal above the marginal floor.">
+  <figcaption><b>Figure 4.</b> Information decomposition: state 92.8%, identity 6.7% (test),
+  conditions 0.5% (validation) of the signal above the marginal floor.</figcaption>
+</figure>
+<figure>
+  <img src="../report/figures/fig5_effect_sizes.png" alt="Bar chart: effect sizes in bits per ball. Identity 0.0073 and conditions 0.0006, both far below the 1% bar at about 0.0233.">
+  <figcaption><b>Figure 5.</b> Effect sizes in bits/ball against the 1%-improvement bar. Both
+  enrichments fall far short.</figcaption>
+</figure>
+<figure>
+  <img src="../report/figures/fig6_calibration_perclass.png" alt="Grouped bar chart: per-class expected calibration error, state vs identity. Identity slightly worsens dot and boundary calibration.">
+  <figcaption><b>Figure 6.</b> Per-class calibration (ECE), state vs +identity on test.
+  Identity slightly worsens dot and boundary calibration.</figcaption>
+</figure>
+
+<h2>References</h2>
+<ul>
+  <li>S. Rushe, <i>Cricsheet</i> — ball-by-ball cricket data, CC BY-SA 4.0.
+  <a href="https://cricsheet.org">cricsheet.org</a></li>
+  <li>Full method and frozen conventions:
+  <a href="https://github.com/dudailia/cricstate/blob/main/docs/SPEC_M1.md"><code>docs/SPEC_M1.md</code></a>,
+  <a href="https://github.com/dudailia/cricstate/blob/main/docs/SPEC_M2.md"><code>docs/SPEC_M2.md</code></a>
+  (with gate-documented amendments) in this repository.</li>
+</ul>
+
+<footer>
+  <p><a href="../">Project page</a> ·
+  <a href="https://github.com/dudailia/cricstate">Source repository</a> ·
+  <a href="https://github.com/dudailia/cricstate/blob/main/report/paper.md">This paper as markdown</a></p>
+  <p>Code: MIT. Data: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>,
+  from <a href="https://cricsheet.org">Cricsheet</a> (Stephen Rushe) — attribute and share alike.<br>
+  The canonical text is <code>report/paper.md</code>; this page is a typeset rendering of the
+  same frozen content.</p>
+</footer>
+
+</div>
+</body>
+</html>
