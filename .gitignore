@@ -17,3 +17,9 @@ __pycache__/
 .hypothesis/
 dist/
 *.egg-info/
+
+# Launch/marketing drafts — kept local, not part of the public artifact
+comms/
+
+# Local interview-prep notes — not part of the public artifact
+interview/
