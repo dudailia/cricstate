@@ -17,6 +17,8 @@ evidence packs (the audit trail) after.
 |---|---|
 | [`BRANCH_A_REPORT.md`](BRANCH_A_REPORT.md) | Player identity gate experiment — verdict **AMBIGUOUS** (+0.31%), tower declined |
 | [`../report/paper.md`](../report/paper.md) | The paper: the pre-registered negative result ([typeset version](https://dudailia.github.io/cricstate/paper/)) |
+| [`FAQ.md`](FAQ.md) | The skeptic's tour — every hard question, answered from the frozen evidence |
+| [`INTERVIEW.md`](INTERVIEW.md) | How to present the project in 30s / 2min / 10min, and what not to claim |
 
 ## The frozen contract (auditor mode)
 
