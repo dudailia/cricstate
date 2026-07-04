@@ -40,14 +40,18 @@ def fig_state_ladder(s: dict[str, Any]) -> None:
         "t20 · per-ball outcome NLL on the test split (lower is better) · 95% CI",
     )
     y = np.arange(len(names))[::-1]
-    ax.barh(y, vals, color=plots.GREEN_RAMP, height=0.62, zorder=3)
+    # Dot + CI, not bars: position (not length-from-zero) encodes the value, so a
+    # zoomed axis that reveals the small, real gaps does not imply a false ratio.
     ax.errorbar(
-        vals, y, xerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.0, capsize=3, zorder=4
+        vals, y, xerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.2, capsize=3, zorder=3
+    )
+    ax.scatter(
+        vals, y, c=plots.GREEN_RAMP, s=120, zorder=4, edgecolors=plots.SURFACE, linewidths=1.2
     )
     for yi, n in zip(y, names, strict=True):
         hi = ladder[n]["ci"][1]
         ax.text(
-            hi + 0.0025,
+            hi + 0.004,
             yi,
             f"{ladder[n]['nll']:.3f}",
             va="center",
@@ -58,7 +62,8 @@ def fig_state_ladder(s: dict[str, Any]) -> None:
         )
     ax.set_yticks(y)
     ax.set_yticklabels(labels)
-    ax.set_xlim(1.58, 1.715)
+    ax.set_ylim(-0.6, len(names) - 0.4)
+    ax.set_xlim(1.60, 1.715)
     ax.set_xlabel("test NLL (nats)")
     plots.footnote(fig, s["meta"])
     plots.save(fig, FIGDIR / "fig1_state_ladder.png")
@@ -77,14 +82,16 @@ def fig_identity_delta(s: dict[str, Any]) -> None:
         "t20 test NLL · shrunk identity barely beats state; unshrunk overfits; shuffled ≈ null",
     )
     x = np.arange(len(order))
-    ax.bar(x, vals, color=colors, width=0.64, zorder=3)
-    ax.errorbar(
-        x, vals, yerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.0, capsize=3, zorder=4
-    )
+    # Dot + CI, not bars: with M_flat far above a tight cluster, a zoomed dot plot
+    # shows both the overfit gap and the near-null shrunk effect honestly.
     state = m["M_state"]["nll"]
     ax.axhline(state, color=plots.MUTED, ls="--", lw=1.0, zorder=2)
+    ax.errorbar(
+        x, vals, yerr=errs, fmt="none", ecolor=plots.INK, elinewidth=1.2, capsize=3, zorder=3
+    )
+    ax.scatter(x, vals, c=colors, s=130, zorder=4, edgecolors=plots.SURFACE, linewidths=1.2)
     for xi, v in zip(x, vals, strict=True):
-        ax.text(xi, v + 0.004, f"{v:.3f}", va="bottom", ha="center", color=plots.INK, fontsize=9.5)
+        ax.text(xi + 0.14, v, f"{v:.3f}", va="center", ha="left", color=plots.INK, fontsize=9.5)
     ax.set_xticks(x)
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylim(1.58, 1.80)
