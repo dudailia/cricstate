@@ -93,6 +93,7 @@
   section{padding:44px 0}
   h2.sec{font-size:26px; margin:0 0 6px}
   .sub{color:var(--muted); font-size:15px; margin:0 0 22px}
+  .tablewrap{overflow-x:auto}
   table{width:100%; border-collapse:collapse; font-size:15px}
   th,td{text-align:right; padding:11px 10px; border-bottom:1px solid var(--line-soft)}
   th:first-child,td:first-child{text-align:left}
@@ -209,7 +210,7 @@
     with 95% match-level paired-bootstrap intervals. (This is the paper's 11-class task;
     the companion <a href="https://github.com/dudailia/cricstate/blob/main/docs/LEADERBOARD.md">win-probability
     leaderboard</a> is binary, so its NLLs sit near 0.49 — a different scale, not a discrepancy.)</p>
-    <table>
+    <div class="tablewrap"><table>
       <thead><tr><th>model</th><th>test NLL</th><th class="ci-col">95% CI</th></tr></thead>
       <tbody>
         <tr><td>B0 — marginal</td><td class="num">1.685</td><td class="num ci-col">[1.679, 1.690]</td></tr>
@@ -217,7 +218,7 @@
         <tr><td>B2 — regularized logistic</td><td class="num">1.629</td><td class="num ci-col">[1.623, 1.634]</td></tr>
         <tr class="best"><td>B3 — gradient-boosted state</td><td class="num">1.614</td><td class="num ci-col">[1.609, 1.620]</td></tr>
       </tbody>
-    </table>
+    </table></div>
   </section>
 
   <hr class="rule">
