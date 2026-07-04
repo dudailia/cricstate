@@ -44,6 +44,7 @@
   }
   a{color:var(--pitch); text-underline-offset:3px; text-decoration-thickness:1px}
   a:hover{color:#184d2d}
+  a:focus-visible{outline:2px solid var(--pitch); outline-offset:3px; border-radius:2px}
   h1,h2,h3{font-family:var(--serif); font-weight:600; text-wrap:balance; letter-spacing:-.01em}
   .num{font-family:var(--mono); font-variant-numeric:tabular-nums}
 
@@ -69,6 +70,7 @@
   .barkey{display:flex; gap:22px; flex-wrap:wrap; margin-top:14px; font-size:13.5px; color:var(--muted)}
   .barkey span{display:inline-flex; align-items:center; gap:7px}
   .barkey i{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .barkey b{color:var(--ink); font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:600}
   .caption{font-size:13.5px; color:var(--muted); margin:16px 0 0; max-width:64ch}
 
   /* ---- verdicts ---- */
@@ -149,13 +151,13 @@
     </div>
     <div class="bar" role="img" aria-label="Match state 92.8 percent, player identity 6.7 percent, conditions 0.5 percent.">
       <div class="seg state"><span class="pct">92.8%</span><span class="lab">match state (B3)</span></div>
-      <div class="seg identity"><span class="pct">6.7%</span><span class="lab">identity</span></div>
+      <div class="seg identity"></div>
       <div class="seg conditions"></div>
     </div>
     <div class="barkey">
-      <span><i style="background:var(--pitch)"></i>match state — 0.0702 nats (test)</span>
-      <span><i style="background:var(--pitch-mid)"></i>player identity — 0.0050 (test)</span>
-      <span><i style="background:var(--amber)"></i>conditions — 0.0004 (validation)</span>
+      <span><i style="background:var(--pitch)"></i>match state — <b>92.8%</b> · 0.0702 nats (test)</span>
+      <span><i style="background:var(--pitch-mid)"></i>player identity — <b>6.7%</b> · 0.0050 (test)</span>
+      <span><i style="background:var(--amber)"></i>conditions — <b>0.5%</b> · 0.0004 (validation)</span>
     </div>
     <p class="caption"><b>Match state is saturating.</b> A gradient-boosted model of within-match
     state captures almost all of the recoverable-above-marginal structure. The two obvious
