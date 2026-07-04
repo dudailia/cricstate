@@ -65,7 +65,7 @@ build-failing test.
 **Baseline ladder and the state model (B3).** We report a ladder from a marginal
 baseline (B0) through a bucketed table (B1) and regularized logistic model (B2)
 to a **gradient-boosted state model (B3)** — `HistGradientBoostingClassifier`
-on ~25 whitelisted within-match state features, no identity, no latent
+on 27 whitelisted within-match state features, no identity, no latent
 variables. B3 is the strong baseline every enrichment must beat (Table 1,
 Figure 1).
 

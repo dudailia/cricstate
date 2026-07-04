@@ -6,7 +6,7 @@ How to present this project honestly and well — in 30 seconds, 2 minutes, or
 
 ## 30 seconds
 
-> I built a leakage-audited benchmark on 4.7M balls of cricket data to answer
+> I built a leakage-audited benchmark on 4.75M balls of cricket data to answer
 > one question: once you model match state well, is there anything left in the
 > features everyone reaches for next — player identity and pitch conditions?
 > I pre-registered a decision rule, evaluated the test split once, and the

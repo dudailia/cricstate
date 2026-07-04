@@ -80,7 +80,7 @@ only, so a wicket-prone-but-not-low-scoring pitch signal remains unmeasured.
 ### Why no deep learning?
 
 The question is *where signal lives*, not *which architecture wins*. B3
-(gradient-boosted trees over ~25 state features) is a strong, calibrated,
+(gradient-boosted trees over 27 state features) is a strong, calibrated,
 cheap-to-audit state model; the enrichment arms then isolate identity and
 conditions as *increments* with one tunable each. A transformer over ball
 sequences would entangle state, identity, and conditions into one score and
@@ -109,6 +109,18 @@ Because it's the methodology working. ΔNLL test −0.006 with 95% CI
 says "did not beat the bar" — and that's what's reported. A framework that
 only ever certifies wins should not be trusted; this one demonstrably
 refuses a close call.
+
+### The split table says 143 ODI test matches, but the ODI cell says 136. Which is right?
+
+Both — they count different things. The split table (`docs/LEADERBOARD.md`
+"Splits") counts every match assigned to the test window by date. An
+evaluation cell counts matches that contribute at least one *eligible labeled
+delivery*: the harness drops deliveries flagged `excluded_from_tuples` (super
+overs) and, for a labeled task, matches with no usable label —
+`EXCLUDE_NO_RESULT` (no-result / abandoned) — and restricts to innings ≤ 2
+(`src/evalkit/datasets.py`). The 143 → 136 ODI gap (and the T20 1,530 → 1,493)
+is exactly those dropped matches. Nothing is silently discarded; the filter is
+one function you can read.
 
 ### Can I build on this?
 

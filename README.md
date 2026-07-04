@@ -10,8 +10,8 @@
 **How much predictive signal is there in free ball-by-ball cricket data beyond
 match state?** A reproducible research repository that answers with a
 **pre-registered negative result** — a strong state model, two honest
-enrichment experiments, and a decision rule fixed before the test split was
-ever touched. Built on 16,754 professionally-parsed matches (4.7M deliveries).
+enrichment experiments, and a single-touch evaluation protocol fixed before the
+test split was ever read. Built on 16,754 matches (4.75M deliveries).
 
 <p align="center">
   <img src="report/figures/fig4_residual_decomposition.png" width="720"
