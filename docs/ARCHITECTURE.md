@@ -76,7 +76,7 @@ The measuring instrument, frozen at corpus tag `v1.2`:
 ### Gate experiments (`experiments/`)
 
 Each experiment **imports** the frozen harness rather than reimplementing it,
-touches the test split at most once, and ends in a pre-registered verdict:
+touches the test split at most once, and ends in a fixed-rule verdict:
 
 - **Branch A — player identity** (`experiments/branch_a`): empirical-Bayes
   shrunk striker/bowler effects added to B3's logits. Verdict **AMBIGUOUS**

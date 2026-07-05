@@ -15,7 +15,7 @@ abstract: >-
   signal exists in free ball-by-ball cricket data beyond match state. It pairs
   a deterministic state core (Module 1) with a frozen evaluation harness
   (Module 2: temporal splits, proper scoring rules, match-level paired
-  bootstrap, calibration, leakage canaries, a pre-registered decision rule) and
+  bootstrap, calibration, leakage canaries, a fixed decision rule) and
   two gate experiments. Headline negative result: match state is saturating —
   player identity adds only +0.31% NLL (AMBIGUOUS) and a causal per-match
   conditions latent adds +0.024% on validation (negligible).

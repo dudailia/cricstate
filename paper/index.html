@@ -102,8 +102,8 @@
   <p class="backlink"><a href="../">← cricstate</a></p>
   <span class="eyebrow">Pre-registered negative result</span>
   <h1>How much predictive signal is there in free ball-by-ball cricket data beyond match state?</h1>
-  <p class="subtitle">A strong state model, two honest enrichment experiments, and a decision
-  rule fixed before the test split was ever touched.</p>
+  <p class="subtitle">A strong state model, two honest enrichment experiments, and an evaluation
+  protocol fixed before the test split was ever read.</p>
   <p class="meta">cricstate project · corpus v1.2 · all evaluation seeded (1337) and hash-pinned ·
   <a href="https://github.com/dudailia/cricstate/blob/main/report/paper.md">source markdown</a></p>
 </header>
@@ -120,14 +120,14 @@
   <b>match-level paired bootstrap</b> (10,000 resamples). Against a gradient-boosted state model
   (B3, test NLL <span class="num">1.614</span> nats), a strongly shrunk player-identity model
   improves test NLL by <b>0.31% (0.0073 bits/ball)</b> — statistically distinguishable from zero
-  but below our pre-registered 1% materiality bar (verdict: <b>AMBIGUOUS</b>). A
+  but below our fixed 1% materiality bar (verdict: <b>AMBIGUOUS</b>). A
   causally-filtered per-match "conditions" latent improves <i>validation</i> NLL by
   <b>0.024% (0.0006 bits/ball)</b>, an order of magnitude smaller; on that evidence the arm was
   frozen before its one-time test evaluation. Leakage canaries (shuffled identity, shuffled
   targets, poisoned features, temporal-split integrity) all pass. We conclude that within-match
   <b>state is saturating</b>: it captures ~93% of the recoverable-above-marginal signal, and the
   two obvious enrichments buy almost nothing. We publish this as a negative result, with the
-  decision rule fixed before the test split was touched.</p>
+  evaluation protocol fixed before the test split was read.</p>
 </div>
 
 <h2><span class="no">1</span>Introduction</h2>
@@ -182,8 +182,9 @@ expected calibration error (ECE, 20 equal-mass bins). Calibration maps (temperat
 on validation only.</p>
 <p><b>Pre-registered decision rule.</b> An enrichment <b>JUSTIFIES</b> further work iff its
 paired ΔNLL 95% CI excludes 0 <b>and</b> relative improvement ≥ 1.0%; <b>AMBIGUOUS</b> if the
-CI excludes 0 but improvement is in [0.3%, 1.0%); <b>KILL</b> otherwise. The rule was fixed
-before the test split was evaluated and is not renegotiated afterwards.</p>
+CI excludes 0 but improvement is in [0.3%, 1.0%); <b>KILL</b> otherwise. The protocol was fixed
+before the test split was read; no threshold is renegotiated after a result (amendments are
+additive and dated). SPEC_M2 §6 gives the exact, git-checkable timeline.</p>
 <p><b>Leakage canaries (all must pass).</b> Shuffled-identity (identities randomly reassigned →
 must collapse to the state baseline within 0.01 nats), shuffled-target (retrain on permuted
 labels → must sit at the marginal), poisoned-column (an injected outcome feature must be
@@ -285,7 +286,7 @@ was not run (arm frozen at C1).</p>
 model of within-match state already captures nearly all the per-ball predictive structure that
 free ball-by-ball data exposes. Identity adds a real but sub-materiality 0.31%; a causal
 conditions latent adds an order of magnitude less. The practitioner's two obvious next features
-do not, on this data, clear a pre-registered bar.</p>
+do not, on this data, clear a fixed materiality bar.</p>
 <p><b>Scope of the conditions null.</b> By construction the conditions latent is a
 <b>scoring-valence</b> signal (runs-weighted). A null therefore rules out a per-match
 <i>scoring-rate</i> conditions factor beyond state — not conditions in general. A pitch that is
@@ -315,7 +316,7 @@ they cut against a "player modelling helps" narrative.</p>
 <h2><span class="no">7</span>Conclusion</h2>
 <p>Within-match state is a saturating predictor of the next ball in free ball-by-ball cricket
 data. Player identity contributes a real but immaterial 0.31% (AMBIGUOUS under a
-pre-registered rule); a causal per-match scoring conditions latent contributes a negligible
+fixed decision rule); a causal per-match scoring conditions latent contributes a negligible
 0.024% on validation and was frozen before its test evaluation. The scientific content of this
 repository is not a model that wins — it is a measurement, made adversarial to itself and
 pre-committed, that says the obvious enrichments are not worth building.</p>

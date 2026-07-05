@@ -19,7 +19,7 @@ log-likelihood (NLL) as the primary metric, and 95% confidence intervals from a
 **match-level paired bootstrap** (10,000 resamples). Against a gradient-boosted
 state model (B3, test NLL 1.614 nats), a strongly shrunk player-identity model
 improves test NLL by **0.31% (0.007 bits/ball)** — statistically distinguishable
-from zero but below our pre-registered 1% materiality bar (verdict:
+from zero but below our fixed 1% materiality bar (verdict:
 **AMBIGUOUS**). A causally-filtered per-match "conditions" latent improves
 *validation* NLL by **0.024% (0.0006 bits/ball)**, an order of magnitude
 smaller; on that evidence the arm was frozen before its one-time test
@@ -27,7 +27,7 @@ evaluation. Leakage canaries (shuffled identity, shuffled targets, poisoned
 features, temporal-split integrity) all pass. We conclude that within-match
 **state is saturating**: it captures ~93% of the recoverable-above-marginal
 signal, and the two obvious enrichments buy almost nothing. We publish this as a
-negative result, with the decision rule fixed before the test split was touched.
+negative result, with the evaluation protocol fixed before the test split was read.
 
 ## 1. Introduction
 
@@ -97,8 +97,9 @@ bins). Calibration maps (temperature) are fit on validation only.
 **Pre-registered decision rule.** An enrichment **JUSTIFIES** further work iff
 its paired ΔNLL 95% CI excludes 0 **and** relative improvement ≥ 1.0%;
 **AMBIGUOUS** if the CI excludes 0 but improvement is in [0.3%, 1.0%); **KILL**
-otherwise. The rule was fixed before the test split was evaluated and is not
-renegotiated afterwards.
+otherwise. The protocol was fixed before the test split was read; no threshold is
+renegotiated after a result (amendments are additive and dated). See SPEC_M2 §6
+for the exact, git-checkable timeline of what was frozen when.
 
 **Leakage canaries (all must pass).** Shuffled-identity (identities randomly
 reassigned → must collapse to the state baseline within 0.01 nats),
@@ -154,7 +155,7 @@ gradient-boosted model of within-match state already captures nearly all the
 per-ball predictive structure that free ball-by-ball data exposes. Identity
 adds a real but sub-materiality 0.31%; a causal conditions latent adds an
 order of magnitude less. The practitioner's two obvious next features do not,
-on this data, clear a pre-registered bar.
+on this data, clear a fixed materiality bar.
 
 **Scope of the conditions null.** By construction the conditions latent is a
 **scoring-valence** signal (runs-weighted). A null therefore rules out a
@@ -189,7 +190,7 @@ helps" narrative.
 
 Within-match state is a saturating predictor of the next ball in free
 ball-by-ball cricket data. Player identity contributes a real but immaterial
-0.31% (AMBIGUOUS under a pre-registered rule); a causal per-match scoring
+0.31% (AMBIGUOUS under a fixed decision rule); a causal per-match scoring
 conditions latent contributes a negligible 0.024% on validation and was frozen
 before its test evaluation. The scientific content of this repository is not a
 model that wins — it is a measurement, made adversarial to itself and

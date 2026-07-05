@@ -30,8 +30,9 @@ test split was ever read. Built on 16,754 matches (4.75M deliveries).
 paper, [typeset](https://dudailia.github.io/cricstate/paper/) or as
 [markdown](report/paper.md). **Auditor mode:** [`docs/REPRODUCE.md`](docs/REPRODUCE.md)
 end-to-end, then the frozen decision rule in
-[`docs/SPEC_M2.md`](docs/SPEC_M2.md) §6 — committed to git before any result
-existed. The [docs index](docs/README.md) has a guided reading order.
+[`docs/SPEC_M2.md`](docs/SPEC_M2.md) §6, which gives the exact, git-checkable
+timeline of what was frozen when. The [docs index](docs/README.md) has a guided
+reading order.
 
 Most sports-prediction results are unfalsifiable: tuned on the data they report,
 scored without uncertainty, calibrated after the fact. cricstate is the

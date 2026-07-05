@@ -12,8 +12,9 @@ These do not change, in any PR, for any reason:
 - The datasets and their hashes (`data/MANIFEST`, corpus v1.2, labels).
 - The evaluation harness semantics (`src/evalkit/`), the frozen feature
   whitelist, the splits, the calibration protocol.
-- The decision rule (SPEC_M2 §6). It was fixed before results existed and is
-  not renegotiable after them — that ordering is the point of the project.
+- The decision rule (SPEC_M2 §6). The evaluation protocol was fixed before the
+  test split was read, and no threshold is renegotiated after a result — that
+  ordering is the point of the project.
 - The test split's touch count. It was evaluated once; there is no second
   touch.
 
