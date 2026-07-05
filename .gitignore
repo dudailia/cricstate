@@ -23,3 +23,6 @@ comms/
 
 # Local interview-prep notes — not part of the public artifact
 interview/
+
+# Portfolio / launch content — personal, published to external destinations, not the repo
+portfolio/
